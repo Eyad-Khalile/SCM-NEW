@@ -1,0 +1,14 @@
+body {
+    direction: rtl;
+    text-align: right ;
+}
+
+.hr-nav {
+    margin-right: 0 !important;
+}
+/* .control-label {
+    direction : ltr;
+} */
+label {
+    float: right !important;
+}

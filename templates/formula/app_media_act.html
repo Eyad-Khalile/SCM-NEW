@@ -1,0 +1,255 @@
+{% extends "base.html" %} {% load i18n widget_tweaks crispy_forms_tags %}
+{% block title %} {% trans "طلب دعم للأفراد اﻹعلاميين" %} {% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="card rounded mt-5 px-5 pt-5 pb-5">
+        <h1 class="mb-4 pt-0"> {% trans 'نموذج طلب دعم للأفراد اﻹعلاميين' %} </h1>
+
+
+        <form action="" method="post" class="form-profile mw-80 registration-form change-color px-5 pt-5 pb-5"
+            enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset>
+                <!-- {{ u_app.media }} -->
+                <div class="card card-form rounded p-4 mt-4 mb-4 medical-info">
+                    <button class="btn btn-info w-25 mb-4" type="button" data-toggle="collapse"
+                        data-target="#collapseMedicalInfo" aria-expanded="false" aria-controls="collapseMedicalInfo">
+                        {% trans 'المعلومات الطبية' %}
+                    </button>
+                    <div class="collapse" id="collapseMedicalInfo">
+                        <div class="form-group">
+                            {{ u_app.medical_state_q|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.medical_state_des|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ///////// FAMILY STATUS ////// -->
+                <div class="card card-form rounded p-4 mt-4 mb-4 family-status">
+                    <button class="btn btn-info w-25 mb-4" type="button" data-toggle="collapse"
+                        data-target="#collapseFamilyStatus" aria-expanded="false" aria-controls="collapseFamilyStatus">
+                        {% trans 'الوضع العائلي' %}
+                    </button>
+                    <div class="collapse" id="collapseFamilyStatus">
+                        <div class="form-group">
+                            {{ u_app.family_state|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.have_kids|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.number_kids|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.summary_family|as_crispy_field }}
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ///////// WORK STATUS ////// -->
+                <div class="card card-form rounded p-4 mt-4 mb-4 work-status">
+                    <button class="btn btn-info w-25 mb-4" type="button" data-toggle="collapse"
+                        data-target="#collapseWorkStatus" aria-expanded="false" aria-controls="collapseWorkStatus">
+                        {% trans 'معلومات العمل' %}
+                    </button>
+                    <div class="collapse" id="collapseWorkStatus">
+                        <div class="form-group">
+                            {{ u_app.education_level|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.job|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.experience|as_crispy_field }}
+                        </div>
+
+                        <!-- INLINE FORM EXPERIENCE -->
+                        <div class="form-exper mb-5 pb-3 card bg-light col-8">
+                            <h2 class="mb-0">أضافة خبرات عمل سابقة </h2>
+                            <hr>
+
+                            {{ u_exper.management_form }}
+                            <div id="form_set">
+                                {% for form in u_exper %}
+                                {{form.non_field_errors}}
+                                {{form.errors}}
+                                <table class='no_error mb-5 pb-5'>
+                                    {{ form }}
+                                </table>
+                                {% endfor %}
+                            </div>
+
+                            <input type="button" value="{% trans 'إضافى خبرة عمل' %}" class="btn btn-info"
+                                id="add_more">
+
+                            <div id="empty_form" style="display:none">
+                                <table class='no_error'>
+                                    <div class="form-group mt-5 mb-5 pt-5 pb-5">
+                                        {{ u_exper.empty_form }}
+                                    </div>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            {{ u_app.org_memeber|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.details|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ///////// SUMMARY EXPLIC SITUATIONS ////// -->
+                <div class="card card-form rounded p-4 mt-4 mb-4 summary-exp-sit">
+                    <button class="btn btn-info w-25 mb-4" type="button" data-toggle="collapse"
+                        data-target="#collapseSummaryExSt" aria-expanded="false" aria-controls="collapseSummaryExSt">
+                        {% trans 'ملخص يشرح حالتك وروابط من عملك' %}
+                    </button>
+                    <div class="collapse" id="collapseSummaryExSt">
+                        <div class="form-group">
+                            {{ u_app.if_article_linke|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.articls_link_1|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.if_stop_work|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.date_stop_work|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.resource_prof|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.recmond_1|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.phon_1|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.email_1|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.recmond_2|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.phon_2|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.email_2|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.training_media|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.details_traning_media|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.summary_of_your_state|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ///////// VIOLATIONS ////// -->
+                <div class="card card-form rounded p-4 mt-4 mb-4 violation">
+                    <button class="btn btn-info w-25 mb-4" type="button" data-toggle="collapse"
+                        data-target="#collapseViola" aria-expanded="false" aria-controls="collapseViola">
+                        {% trans 'الانتهاكات' %}
+                    </button>
+                    <div class="collapse" id="collapseViola">
+                        <div class="form-group">
+                            {{ u_app.violations|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.relation_with_org|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.summary_of_relations|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ///////// AUTRE INFORMATIONS ////// -->
+                <div class="card card-form rounded p-4 mt-4 mb-4 autre-info">
+                    <button class="btn btn-info w-25 mb-4" type="button" data-toggle="collapse"
+                        data-target="#collapseAutrStat" aria-expanded="false" aria-controls="collapseAutrStat">
+                        {% trans 'أسئلة تحت طائلة المسؤولية' %}
+                    </button>
+                    <div class="collapse" id="collapseAutrStat">
+                        <div class="form-group">
+                            {{ u_app.other_org_demand|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.name_org|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.date_of_demand_org|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.type_of_demand_other_org|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.result_of_demand_other_org|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.know_support_programme|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ///////// TYPE OF SUPPORT ////// -->
+                <div class="card card-form rounded p-4 mt-4 mb-4 type-of-support">
+                    <button class="btn btn-info w-25 mb-4" type="button" data-toggle="collapse"
+                        data-target="#collapseTypeSupport" aria-expanded="false" aria-controls="collapseTypeSupport">
+                        {% trans 'نوع الدعم' %}
+                    </button>
+                    <div class="collapse" id="collapseTypeSupport">
+                        <div class="form-group">
+                            {{ u_app.type_of_dmande|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.resaon_for_help|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.list_of_tools|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.last_job_salary|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.reason_stopping_job|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ u_app.summary_of_help|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="form-group">
+                    <input type="submit" value="{% trans 'تقديم الطلب' %}" class="btn btn-success mt-4">
+                </div>
+
+
+
+
+            </fieldset>
+
+        </form>
+
+
+    </div>
+</div>
+
+{% endblock %}

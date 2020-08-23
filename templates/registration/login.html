@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load i18n %}
+
+{% block title %} {% trans "تسجيل الدخول" %} {% endblock %}
+
+{% block content %}
+<div class="container text-center">
+
+
+
+
+  <div class="login-form">
+
+    <h1 class="row justify-content-center loader mb-5">
+      {% trans "تسجيل الدخول"%}
+
+      <!-- {% for value in "log-in"  %}
+      <span style="--i:1;">{{ value }}</span>
+      {% endfor %} -->
+
+    </h1>
+
+    <form action="{% url 'login' %}" method="post" class="form-signin form_login_account change-color">
+      <h2>
+        {% trans "رجاءً, سجل الدخول باستخدام النموذج التالي :" %}
+      </h2>
+
+      {% if form.errors %}
+      <!-- Your username and password didn't match. Please try again. -->
+      <p>
+        {% trans "اسم المستخدم و كلمة المرور غير متطابقين, رجاءً حاول مره ثانية " %}
+      </p>
+      {% else %}
+      <!-- <p>{% trans "If you don't have an account"%} <a class="btn btn-color btn-block" href="{% url 'register' %}">
+          <span class="row justify-content-center btn-loader">
+            {% trans "register hear"%}
+          </span>
+        </a></p> -->
+      <hr>
+
+
+
+      {% csrf_token %}
+
+      <div class="form-group">
+        {{ form.username.label_tag }}
+        {{ form.username|add_class:'form-controler'  }}
+      </div>
+      <div class="form-group">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+      </div>
+
+
+      <div class="form-group pt-5">
+        <input type="hidden" name="next" value="{{ next }}" />
+        <!-- <input type="submit" value="Log-in"></<input> -->
+        <button class="btn btn-color btn-block" type="submit">
+          <span class="row justify-content-center  btn-loader">
+            {% trans "تسحيل الدخول"%}
+          </span>
+        </button>
+      </div>
+
+      <hr>
+
+      <div class="form-group">
+        <a class="btn btn-color btn-block" href="{% url 'password_reset' %}">
+          <span class="row justify-content-center btn-loader">
+            {% trans "هل نسيت كلمة المرور ؟"%}
+          </span>
+        </a>
+      </div>
+      <hr>
+
+      <div class="form-group">
+        <p>{% trans "إن كنت لا تملك حساب بعد, و تريد التسجيل "%}</p>
+        <p>{% trans "يمكنك التسجيل من هنا" %}</p>
+        <a class="btn btn-color btn-block" href="{% url 'register' %}">
+          <span class="row justify-content-center btn-loader">
+            {% trans "التسجيل"%}
+          </span>
+        </a>
+      </div>
+
+    </form>
+    <p></p>
+  </div>
+
+  {% endif %}
+
+</div>
+
+{% endblock %}

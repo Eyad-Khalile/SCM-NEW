@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %} {% trans "Log out" %} {% endblock %}
+
+{% block content %}
+<div class="container text-center">
+  <!-- <h1>Logged out</h1> -->
+  <h1 class="row justify-content-center loader">
+    {% trans "Log out" %}
+  </h1>
+
+  <div class="alert alert-success">
+    <p>{% trans "You have been successfully logged out."%} </p>
+  </div>
+
+  <p> <a href="{% url "login" %}" class="btn btn-color">
+      <span class="row w-20 pl-3 pr-3 gutter-10 justify-content-center btn-loader">
+        {% trans "log-in again"%}
+      </span>
+    </a></p>
+</div>
+
+{% endblock %}

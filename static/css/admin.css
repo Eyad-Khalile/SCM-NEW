@@ -1,0 +1,44 @@
+div.breadcrumbs {
+  font-size: 16px !important;
+}
+
+.form-row .inline-group {
+  margin-top: 30px;
+}
+
+h1 {
+  font-size: 2rem !important;
+}
+
+h2 {
+  font-size: 1.2rem !important;
+}
+
+h3 {
+  font-size: 1rem !important;
+}
+
+/* form label {
+  font-size: 1rem !important;
+} */
+
+form input {
+  font-size: 1rem !important;
+}
+
+form span {
+  font-size: 0.75rem !important;
+}
+
+p.deletelink-box {
+  font-size: 1rem !important;
+}
+
+th {
+  font-size: 14px !important;
+}
+
+.vTextField,
+.vUUIDField {
+  width: 12em !important;
+}

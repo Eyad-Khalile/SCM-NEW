@@ -1,0 +1,166 @@
+{% load i18n static %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img class="logo-nav" src="{% static 'media/logo.jpg' %}" alt="logo" width="50px">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link inactiveLink d-none d-lg-block d-xl-block" href="#"> | <span
+                            class="sr-only">(current)</span></a>
+                </li>
+
+
+
+                <li class="nav-item">
+                    <a class="nav-link" {% if section == "about" %}class="selected" {% endif %}
+                        href="{% url 'about' %}">
+                        {% trans "من نكون" %} <span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" {% if section == "contact" %}class="selected" {% endif %}
+                        href="{% url 'contact' %}">
+                        {% trans "اتصل بنا" %} <span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item" {% if section == "images" %}class="selected" {% endif %}>
+                    <a class="nav-link" href="#"> {% trans "الصور" %} <span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item" {% if section == "people" %} class="selected" {% endif %}>
+                    <a class="nav-link" href="#"> {% trans "أشخاص" %} <span class="sr-only">(current)</span></a>
+                </li>
+
+                <!-- {% if request.user.is_authenticated %}
+          <li class="nav-item" {% if section == "dashboard" %}class="selected" {% endif %}>
+            <a class="nav-link" href="">My dashboard <span class="sr-only">(current)</span></a>
+          </li>
+          {% endif %} -->
+
+
+
+
+
+            </ul>
+
+            <ul class="navbar-nav mr-auto ul_log ">
+
+                <li class="nav-item hr-float-right">
+                    <a class="nav-link inactiveLink d-lg-none d-xl-none " href="#">
+                        <hr class="hr-nav" {% if LANGUAGE_CODE == "ar"%} class="float-right" {% endif %}>
+                        <!-- <span class="sr-only">(current)</span> -->
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    <!-- {{ LANGUAGE_CODE }} -->
+
+                    <form class="row g-3 align-items-center" action="{% url 'set_language' %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group col-auto">
+                            <input type="hidden" name="next" value="{{ redirect_to }}">
+                            <select class="form-control" name="language" id="">
+                                {% get_available_languages as LANGUAGES %}
+                                {% get_language_info_list for LANGUAGES as languages%}
+                                {% for language in languages %}
+                                <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected
+                                    {% endif %}>
+                                    {{ language.name_local}} ({{ language.code }})
+                                </option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+                        <div class="form-group col-auto">
+                            {% if LANGUAGE_CODE == 'ar' %}
+                            <button class="btn-save btn btn-success btn-sm mb-0" type="submit"><i
+                                    class="fa fa-arrow-left" aria-hidden="true"></i></button>
+                            {% else %}
+                            <button class="btn-save btn btn-success btn-sm mb-0" type="submit"><i
+                                    class="fa fa-arrow-right" aria-hidden="true"></i></button>
+                            {% endif %}
+                        </div>
+
+
+
+
+
+                    </form>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link inactiveLink d-none d-lg-block d-xl-block" href="#"> | <span
+                            class="sr-only">(current)</span></a>
+                </li>
+
+
+                {% if request.user.is_authenticated %}
+
+
+
+                <li class="nav-item">
+                    <a class="nav-link inactiveLink " href="#" onclick="return false"> {% trans "مرحباً"%} : <span
+                            class="text-uppercase"> (
+                            {{ request.user}} ) </span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link inactiveLink d-none d-lg-block d-xl-block" href="#"> | <span
+                            class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item" {% if section == "profile" %}class="selected" {% endif %}>
+                    <a class="nav-link" href="{% url 'profile' request.user.id %}"> {% trans "ملفي الشخصي" %} <span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link inactiveLink d-none d-lg-block d-xl-block" href="#"> | <span
+                            class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item" {% if section == "dashboard" %}class="selected" {% endif %}>
+                    <a class="nav-link" href="{% url 'dashboard' %}"> {% trans "لوحة التحكم" %} <span
+                            class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" {% if section == "logout" %}class="selected" {% endif %}
+                        href="{% url 'logout' %}">
+                        {% trans "تسجيل الخروج" %} <span class="sr-only">(current)</span></a>
+                </li>
+                {% else %}
+
+                <!-- <li class="nav-item">
+            <a class="nav-link inactiveLink d-lg-none d-xl-none " href="#">
+              <hr class="float-left hr-nav">
+              <span class="sr-only">(current)</span>
+            </a>
+          </li> -->
+
+                <li class="nav-item">
+                    <a class="nav-link" {% if section == "login" %}class="selected" {% endif %}
+                        href="{% url 'login' %}">
+                        {% trans "تسجيل الدخول" %} <span class="sr-only">(current)</span></a>
+                </li>
+                {% endif %}
+            </ul>
+            <!--         
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form> -->
+        </div>
+    </div>
+
+</nav>

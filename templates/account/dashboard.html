@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% load i18n widget_tweaks crispy_forms_tags %}
+
+{% block title %} {% trans "dashboard" %} {% endblock %} {% block content %}
+<div class="container">
+    <!-- <h1>Dashboard</h1> -->
+
+    <h1 class="row justify-content-left loader">
+        {% trans "لوحة التحكم" %}
+    </h1>
+
+    {% if request.user.profile.who_are_you  %}
+
+
+    <div class="row mt-3 mb-5 p-3">
+        <aside class="aside_db col-sm-12 col-md-6 col-lg-3 change-color">
+            <a href="{% url 'password_change' %}" class="btn btn-color btn-block">
+                <span class="row justify-content-center btn-loader">
+                    {% trans "تغيير كلمة السر"%}
+                </span>
+            </a>
+            {% if request.user.profile.who_are_you == '1' %}
+            <a href="{% url 'app_media_act' request.user.id %}" class="btn btn-color btn-block">
+                <span class="row justify-content-center btn-loader">
+                    {% trans "طلب دعم لفرد إعلامي"%}
+                </span>
+            </a>
+            {% elif request.user.profile.who_are_you == '2' %}
+            <a href="" class="btn btn-color btn-block">
+                <span class="row justify-content-center btn-loader">
+                    {% trans "طلب دعم لناشط حقوقي"%}
+                </span>
+            </a>
+            {% elif request.user.profile.who_are_you == '3' %}
+            <a href="" class="btn btn-color btn-block">
+                <span class="row justify-content-center btn-loader">
+                    {% trans "طلب دعم للمؤسسة إعلامية"%}
+                </span>
+            </a>
+            {% endif %}
+            {# {% url 'formula:register_form' %} #}
+
+        </aside>
+        <article class="col-sm-12 col-md-6 col-lg-9">
+            <h2 class="h2-margin">{% trans "إهلاً بك في لوحة التحكم" %}</h2>
+
+            {% if LANGUAGE_CODE == "ar" %}
+            <p>
+                وفي وتنصيب مسؤولية عل, دفّة لدحر انذار ان هذا, أم بعد إعمار لفرنسا
+                اليميني. كما من بقصف فكانت بلديهما. هو فبعد ميناء ايطاليا، على, فاتّبع
+                مهمّات و ذلك. أملاً الثقيل مما عل. يرتبط الشتاء ذلك بـ, عل فصل الساحة
+                الصعداء الجنرال. و تونس الخطّة دنو, ولم ٣٠ هاربر الشتاء،. سقوط العصبة
+                لإنعدام وصل عل, بل حيث لغزو ليركز والروسية. بين ثم يونيو وسمّيت, أخر ثم
+                قادة فمرّ, السيطرة الفرنسي مع بحث. ثم حتى بشكل بالولايات, هو بحق اعلان
+                وبغطاء الدنمارك, خطّة فهرست عل بحق. ما وترك أخرى استعملت وتم. العدّ
+                الخاطفة فصل هو, كانتا الأمريكية بريطانيا، مع الى
+            </p>
+
+            {% else %}
+
+            <p>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia
+                sapiente odit, eius perferendis dolorum, amet commodi consequatur,
+                voluptate fugit nulla molestias voluptatibus quisquam? Quam perferendis
+                odio doloremque, tempora omnis aliquid.
+            </p>
+            {% endif %}
+        </article>
+    </div>
+    {% else %}
+    <p>You have to complate your profile</p>
+    <a href="{% url 'update_profile' request.user.id %}" class="btn btn-primary"> {% trans 'ملفي الشخصي' %} </a>
+    {% endif %}
+</div>
+{% endblock %}

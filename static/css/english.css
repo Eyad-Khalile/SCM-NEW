@@ -1,0 +1,9 @@
+.hr-nav {
+    margin-left: 0 !important;
+}
+
+.mr-auto,
+.mx-auto {
+    margin-right: 0 !important;
+    margin-left: auto !important;
+}

@@ -1,0 +1,85 @@
+{% extends "base.html" %} {% load i18n widget_tweaks crispy_forms_tags %}
+{% block title %} {% trans "تعديل المعلومات الشخصية" %} {% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="card rounded mt-5 px-5 pt-5 pb-5">
+    <h1 class="mb-4 pt-0"> {% trans 'رحاءً, أتمم ملفك الشخصي' %} </h1>
+
+
+    <form action="" method="post" class="form-profile mw-80 registration-form change-color px-5 pt-5 pb-5"
+      enctype="multipart/form-data">
+      {% csrf_token %}
+      <fieldset>
+        <div class="form-group">
+          {{ u_profile.gender|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ u_update.username|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ u_profile.nickname|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ u_update.first_name|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ u_update.last_name|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ u_profile.birth_date|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ u_profile.birth_place|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ u_profile.country|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ u_profile.region|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          <br>
+          <p> {% trans 'عنوانك الحالي :' %} </p>
+        </div>
+        <div class="form-group">
+          {{ u_profile.current_country|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ u_profile.current_region|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ u_profile.phone|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ u_profile.facebook|as_crispy_field }}
+        </div>
+
+
+
+        <div class="form-group">
+          {{ u_profile.who_are_you|as_crispy_field }}
+        </div>
+        {% if request.user.profile.who_are_you == '' %}
+        {% endif %}
+
+
+        <div class="form-group mt-4">
+          {{ u_profile.image|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Update" class="btn btn-success mt-4">
+        </div>
+
+
+
+
+      </fieldset>
+
+    </form>
+
+
+  </div>
+</div>
+
+{% endblock %}

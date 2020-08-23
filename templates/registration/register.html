@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load i18n widget_tweaks crispy_forms_tags %}
+
+{% block title %} {% trans "إنشاء حساب" %} {% endblock %}
+
+{% block content %}
+
+<div class="container text-center">
+
+
+    <h1 class="row text-uppercase justify-content-center loader">
+        {% trans "إنشاء حساب" %}
+    </h1>
+
+
+
+    <form action="." method="post" class="form-signin registration-form form_login_account change-color">
+
+        <!-- Please, sign up using the following form :  -->
+        <p>{% trans "رجاءً, أنشئ حساب باستخدام النموذج التالي" %}</p>
+        {% csrf_token %}
+        <!-- {{ user_form.as_p }} -->
+        <!-- <hr>  -->
+
+
+        {% if user_form.errors %}
+        <div class="alert alert-danger alert-dismissible col-12" role="alert">
+            <div id="form_errors">
+
+                {% for key, value in user_form.errors.items %}
+                <span class="fieldWrapper">
+                    {{ key }}:{{ value }}
+                </span>
+                {% endfor %}
+            </div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% elif formset.total_error_count %}
+        <div class="alert alert-danger alert-dismissible col-12 mx-1" role="alert">
+            {% endif %}
+
+            <div class="form-group">
+                {{ user_form.username|as_crispy_field }}
+                <!-- <span class="helptext">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</span> -->
+            </div>
+
+            <div class="form-group">
+                {{ user_form.first_name|as_crispy_field }}
+            </div>
+            <div class="form-group">
+                {{ user_form.last_name|as_crispy_field }}
+            </div>
+
+            <div class="form-group">
+                {{ user_form.email|as_crispy_field }}
+            </div>
+
+            <div class="form-group">
+                {{ user_form.password|as_crispy_field }}
+            </div>
+
+            <div class="form-group">
+                {{ user_form.password2|as_crispy_field }}
+            </div>
+
+            <!-- <p><input type="submit" value="Create my account"></p> -->
+            <div class="form-group">
+                <input type="hidden" name="next" value="{{ next }}" />
+                <button class="btn btn-color btn-block" type="submit">
+                    <span class="row w-20 pl-3 pr-3 justify-content-center  btn-loader">
+                        {% trans "أنشئ حسابي" %}
+                    </span>
+                </button>
+            </div>
+    </form>
+
+
+
+
+</div>
+
+{% endblock %}
