@@ -176,11 +176,11 @@ class RegisterMediaAct(models.Model):
         ('6', _('تحميل ملفات مرفقة')),
 
     )
-
+    #connect with user and profiele models 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, default=None, on_delete=models.CASCADE)
 
-    # :::::::::::: FALILY STATE :::::::::::
+    # :::::::::::: FAMILY STATE :::::::::::
     family_state = models.CharField(
         max_length=30, choices=family_CHOICES, verbose_name=_('الوضع العائلي'))
     have_kids = models.CharField(
@@ -278,7 +278,7 @@ class RegisterMediaAct(models.Model):
     result_of_demand_other_org = models.TextField(
         max_length=1500, blank=True, null=True, verbose_name=_("ما هي نتيجة الطلب؟"))
     know_support_programme = models.TextField(
-        max_length=1500, verbose_name=_("كيف علمت ببرنامج الدعم ؟"))
+        max_length=1500, verbose_name=_("كيف علمت ببرنامجنا للدعم ؟"))
 
     # ::::::::::::::::: TRAINING ::::::::::::::::::
     training_media = models.CharField(max_length=30, choices=bool_CHOICES,
@@ -366,7 +366,7 @@ class docs(models.Model):
     )
 
     class Meta:
-        verbose_name = ' ملفات'
+        verbose_name = ' ارفاق  ملفات'
 
 
 # evalutions model procesing steps

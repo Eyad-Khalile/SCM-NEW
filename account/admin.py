@@ -196,8 +196,6 @@ class WorkDetailsInline(admin.TabularInline):
     ]
 
 # add the child support form
-
-
 class SupportInline(admin.StackedInline):
     model = SupportOrg
 
@@ -266,24 +264,24 @@ class RegistrationAdmin(admin.ModelAdmin):
         ['معلومات العمل', {
             'classes': ['collapse'],
 
-            'fields': [('education_level', 'job'), ('org_memeber', 'details'), ('experience')]
+            'fields': [('education_level', 'job'),  ('experience'),('if_stop_work', 'date_stop_work'),('org_memeber', 'details')]
         }],
         ['ملخص يشرح حالتك وروابط من عملك', {
             'classes': ['collapse'],
-            'fields': [('if_article_linke', 'articls_link_1'), ('if_stop_work', 'date_stop_work'), ('resource_prof'), ('recmond_1', 'phon_1', 'email_1'), ('recmond_2', 'phon_2', 'email_2'), ("training_media", "details_traning_media"), ('summary_of_your_state')]
+            'fields': [('if_article_linke', 'articls_link_1'),  ('resource_prof'), ('recmond_1', 'phon_1', 'email_1'), ('recmond_2', 'phon_2', 'email_2'), ("training_media", "details_traning_media"), ('summary_of_your_state')]
         }],
         ['الانتهاكات', {
             'classes': ['collapse'],
-            'fields': [('violations'), ('relation_with_org', 'summary_of_relations')]
+            'fields': [('violations'), ]
         }],
         ['أسئلة تحت طائلة المسؤولية', {
             'classes': ['collapse'],
-            'fields': [('other_org_demand'), ('name_org', 'date_of_demand_org'), ('result_of_demand_other_org'), ('know_support_programme')]
+            'fields': [('other_org_demand'), ('name_org', 'date_of_demand_org'), ('result_of_demand_other_org'),('relation_with_org', 'summary_of_relations'), ]
         }],
 
         ['نوع الدعم', {
             'classes': ['collapse'],
-            'fields': [('type_of_dmande'), ('resaon_for_help'), ('list_of_tools'), ('last_job_salary', 'reason_stopping_job'), ('summary_of_help')]
+            'fields': [('type_of_dmande'), ('resaon_for_help'), ('list_of_tools'), ('last_job_salary', 'reason_stopping_job'), ('summary_of_help'),('know_support_programme')]
         }],
     ]
     inlines = [
