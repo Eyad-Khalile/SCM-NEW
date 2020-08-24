@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = 'yucmz538)r(j89-97e-*^19n!kql%wrd!7nuw@*dpe7y0*qw+f'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'six',
     'django_admin_listfilter_dropdown',
-    'daterangefilter',
     'rangefilter',
 
 ]
@@ -87,7 +86,7 @@ WSGI_APPLICATION = 'gate.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
