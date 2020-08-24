@@ -505,7 +505,7 @@ class Checking(models.Model):
 
         return super(Checking, self).save(*args, **kwargs)
 # model to add attach documents
-# here is the test commite to gethub
+# here is the test commite to gethub for sure
 
 class CaseFile(models.Model):
     # When a Case is deleted, upload models are also deleted
