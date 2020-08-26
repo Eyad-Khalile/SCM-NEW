@@ -245,8 +245,8 @@ class CheckingInline1(admin.StackedInline):
 
 
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display = ('user', 'profile', 'education_level',
-                    'support_org_state_1', 'created_at', 'state_step')
+    list_display = ('user', 'profile','get_First_name','get_last_name','get_country','get_region','get_who_are_you','job','education_level',
+                   'type_of_dmande', 'support_org_state_1', 'created_at', 'state_step',)
     # group fields in sub groups
     fieldsets = [
         ['المعالجة', {
@@ -290,10 +290,14 @@ class RegistrationAdmin(admin.ModelAdmin):
     # custom for add inlinfrorm after sp field
     change_form_template = 'admin/custom/change_form.html'
     # filtering
-    list_filter = (('state_step', ChoiceDropdownFilter),  ('type_of_dmande',
-                                                           ChoiceDropdownFilter), ('family_state', ChoiceDropdownFilter), ('medical_state_q', ChoiceDropdownFilter))
-    search_fields = ('region', 'mail', 'first_name', 'last_name',
-                     'Application_number', 'type_of_dmande')
+    list_filter = (('state_step', ChoiceDropdownFilter),  ('type_of_dmande',ChoiceDropdownFilter), ('family_state', ChoiceDropdownFilter), 
+                                                           ('education_level', ChoiceDropdownFilter),('job', ChoiceDropdownFilter),
+                                                           ('Application_date',DateRangeFilter),
+                                                           ('profile__country', ChoiceDropdownFilter),('profile__region', ChoiceDropdownFilter),
+                                                           ('profile__who_are_you', ChoiceDropdownFilter),('violation__violation_type', ChoiceDropdownFilter),
+                                                           ('violations', ChoiceDropdownFilter),('relation_with_org', ChoiceDropdownFilter),
+                                                           ('medical_state_q', ChoiceDropdownFilter),('profile__gender', ChoiceDropdownFilter),('org_memeber', ChoiceDropdownFilter))
+    search_fields = ('job','user__first_name','profile__phone')
     actions = [write_pdf_view1, export_books, ]
     # def has_change_permission(self, request, obj=None):
     #       return False
@@ -316,7 +320,24 @@ class RegistrationAdmin(admin.ModelAdmin):
     #           return [ 'last_name','educatton_level','city','Application_date','nick_name','educatton_level','job','start_date','document_1','document_2','document_3']
     #         else:
     #           return []
-
+    def get_First_name(self, obj):
+        return obj.user.first_name
+    def get_last_name(self,obj):
+        return obj.user.last_name
+    def get_country(self,obj):
+        return obj.profile.country
+    def get_region(self,obj):
+        return obj.profile.region 
+    def get_who_are_you(self,obj):
+        return obj.profile.get_who_are_you_display()
+    def get_violation(self,obj):
+        return obj.violation.get_violation_type_display()
+    get_First_name.short_description = 'الاسم الاول'
+    get_last_name.short_description = 'الاسم الاخير'
+    get_country.short_description = 'الدولة'
+    get_region.short_description='المحافظة'
+    get_who_are_you.short_description='هل أنت'
+    list_per_page = 100
     class Media:
         js = ('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
               '../static/js/test_olde.js', '../static/js/work.js',)
@@ -333,7 +354,7 @@ class CheckingAdmin(admin.ModelAdmin):
     # group fields in sub groups
     list_filter = ('result_of_verfication', ('date_of_updat',
                                              DateRangeFilter), 'manitry_realtion')
-    search_fields = ('tiitle_of_state', 'urg_mark')
+    search_fields = ('tiitle_of_state', 'urg_mark',)
 
 
 class LogAdmin(admin.ModelAdmin):
