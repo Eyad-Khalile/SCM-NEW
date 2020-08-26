@@ -292,7 +292,7 @@ class RegistrationAdmin(admin.ModelAdmin):
     # filtering
     list_filter = (('state_step', ChoiceDropdownFilter),  ('type_of_dmande',ChoiceDropdownFilter), ('family_state', ChoiceDropdownFilter), 
                                                            ('education_level', ChoiceDropdownFilter),('job', ChoiceDropdownFilter),
-                                                           ('Application_date',DateRangeFilter),
+                                                           ('created_at',DateRangeFilter),
                                                            ('profile__country', ChoiceDropdownFilter),('profile__region', ChoiceDropdownFilter),
                                                            ('profile__who_are_you', ChoiceDropdownFilter),('violation__violation_type', ChoiceDropdownFilter),
                                                            ('violations', ChoiceDropdownFilter),('relation_with_org', ChoiceDropdownFilter),
