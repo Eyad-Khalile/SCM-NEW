@@ -94,6 +94,8 @@ class Support_descrption(models.Model):
 
     def __str__(self):
         return self.suppo
+    class Meta:
+            verbose_name_plural =_('الجهات المحولة ')
 
 
 # ::::::::::::::::::: REGISTERATION MEDIA ACTIVIST :::::::::::::::::::::::
@@ -173,7 +175,7 @@ class RegisterMediaAct(models.Model):
         ('3', _('الخطوة الثانية')),
         ('4', _('الخطوة الثالثة')),
         ('5', _('تمت المعالجة')),
-        ('6', _('تحميل ملفات مرفقة')),
+        
 
     )
     #connect with user and profiele models 
@@ -292,7 +294,10 @@ class RegisterMediaAct(models.Model):
         Support_descrption, null=True, default=1, blank=True, on_delete=models.CASCADE, verbose_name=_("الجهة المحولة"))
 
     created_at = models.DateTimeField(auto_now_add=True)
-
+    def __str__(self):
+        return self.user.email
+    class Meta:
+        verbose_name_plural =_('طلبات الافراد الإعلامين')
 
 # ::::::::::::::::::: EXPERIENCE ::::::::::::::::::::::::
 class WorkDetail(models.Model):
@@ -351,7 +356,9 @@ class Violation(models.Model):
     date_of_violation = models.DateField(
         verbose_name="تاريخ الانتهاك ", blank=True)
     responsibility = models.TextField(max_length=500, choices=responsibility_CHOICES,
-                                      null=True, verbose_name="من هي الجهة المسؤولة عن الانتهاك؟")
+                                       null=True, verbose_name="من هي الجهة المسؤولة عن الانتهاك؟")
+    class Meta:
+        verbose_name_plural=_('الانتهاكات')
 
 # :::::::::::::::::: DOCS :::::::::::::::::::::::
 
@@ -366,7 +373,7 @@ class docs(models.Model):
     )
 
     class Meta:
-        verbose_name = ' ارفاق  ملفات'
+        verbose_name_plural =_('ارفاق  ملفات')
 
 
 # evalutions model procesing steps
@@ -506,7 +513,8 @@ class Checking(models.Model):
         return super(Checking, self).save(*args, **kwargs)
 # model to add attach documents
 # here is the test commite to gethub for sure
-
+    class Meta:
+        verbose_name_plural = 'التحقق'
 class CaseFile(models.Model):
     # When a Case is deleted, upload models are also deleted
     case = models.ForeignKey(RegisterMediaAct, on_delete=models.CASCADE)
@@ -516,6 +524,9 @@ class CaseFile(models.Model):
 
     def __unicode__(self):
         return self.case
+    class Meta:
+            verbose_name_plural =_('صندوق الوثائق')
+
 
 
 class SupportOrg(models.Model):
@@ -542,7 +553,8 @@ class SupportOrg(models.Model):
         max_length=255, null=True, blank=True, choices=result_of_org_CHOICES, default=False, verbose_name="النتيجة")
     date_of_result = models.DateField(
         verbose_name="تاريخ الإحالة ", blank=True, null=True)
-
+    class Meta:
+            verbose_name_plural =_('الاستجابة')
 
 class SupportOrgchild(models.Model):
     support = models.ForeignKey(RegisterMediaAct, on_delete=models.CASCADE)
@@ -550,4 +562,8 @@ class SupportOrgchild(models.Model):
                                  on_delete=models.CASCADE, verbose_name="الجهة الداعمة ")
     cost = models.DecimalField(max_digits=10, decimal_places=2,
                                null=True, blank=True, verbose_name="التكلفة مقدرة باليورو")
+    class Meta:
+            verbose_name_plural =_('الجهات الداعمة')
+
 # model to add violation to the registration form or application
+    

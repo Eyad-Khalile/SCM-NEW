@@ -245,13 +245,14 @@ class CheckingInline1(admin.StackedInline):
 
 
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display = ('user', 'profile','get_First_name','get_last_name','get_country','get_region','get_who_are_you','job','education_level',
+    list_display = ('user', 'profile','get_email','get_First_name','get_last_name','get_country','get_region','get_who_are_you','job','education_level',
                    'type_of_dmande', 'support_org_state_1', 'created_at', 'state_step',)
     # group fields in sub groups
     fieldsets = [
         ['المعالجة', {
             'classes': ['collapse'],
-            'fields': [('state_step', 'support_org_state_1'), ]
+            'fields': [('state_step', 'support_org_state_1',), ]
+            
         }],
         ['معلومات شخصية', {
             'classes': ['collapse'],
@@ -297,7 +298,7 @@ class RegistrationAdmin(admin.ModelAdmin):
                                                            ('profile__who_are_you', ChoiceDropdownFilter),('violation__violation_type', ChoiceDropdownFilter),
                                                            ('violations', ChoiceDropdownFilter),('relation_with_org', ChoiceDropdownFilter),
                                                            ('medical_state_q', ChoiceDropdownFilter),('profile__gender', ChoiceDropdownFilter),('org_memeber', ChoiceDropdownFilter))
-    search_fields = ('job','user__first_name','profile__phone')
+    search_fields = ('job','user__first_name','user__last_name','user__email','profile__phone')
     actions = [write_pdf_view1, export_books, ]
     # def has_change_permission(self, request, obj=None):
     #       return False
@@ -332,15 +333,20 @@ class RegistrationAdmin(admin.ModelAdmin):
         return obj.profile.get_who_are_you_display()
     def get_violation(self,obj):
         return obj.violation.get_violation_type_display()
+    def get_email(self,obj):
+            return obj.user.email
+
     get_First_name.short_description = 'الاسم الاول'
     get_last_name.short_description = 'الاسم الاخير'
     get_country.short_description = 'الدولة'
     get_region.short_description='المحافظة'
     get_who_are_you.short_description='هل أنت'
+    get_email.short_description='Email'
+
     list_per_page = 100
     class Media:
         js = ('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
-              '../static/js/test_olde.js', '../static/js/work.js',)
+              '../static/js/test_olde_1.js', '../static/js/work.js',)
         css = {
             'all': (
                 '../static/css/admin.css',
@@ -349,13 +355,14 @@ class RegistrationAdmin(admin.ModelAdmin):
 
 
 class CheckingAdmin(admin.ModelAdmin):
-    list_display = ('registration', 'tiitle_of_state',
+    list_display = ('registration', 'tiitle_of_state','get_F',
                     'urg_mark', 'confirm_stat', 'result_of_verfication')
     # group fields in sub groups
     list_filter = ('result_of_verfication', ('date_of_updat',
                                              DateRangeFilter), 'manitry_realtion')
     search_fields = ('tiitle_of_state', 'urg_mark',)
-
+    def get_F(self, obj):
+        return obj.registration.user.first_name
 
 class LogAdmin(admin.ModelAdmin):
     """Create an admin view of the history/log table"""
