@@ -40,5 +40,9 @@ th {
 
 .vTextField,
 .vUUIDField {
+  /* width: 12em !important; */
+}
+
+.dynamic-registration_media_act input {
   width: 12em !important;
 }

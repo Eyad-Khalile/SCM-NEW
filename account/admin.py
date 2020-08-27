@@ -18,6 +18,7 @@ import csv
 import codecs
 from django_admin_listfilter_dropdown.filters import DropdownFilter, ChoiceDropdownFilter, RelatedDropdownFilter
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
+from django.utils.translation import ugettext_lazy as _
 
 
 class TotalAveragesChangeList(ChangeList):
@@ -45,7 +46,7 @@ class TotalAveragesChangeList(ChangeList):
         # first get the totals from the current changelist
         total = self.get_total_values(self.queryset)
         # then get the averages
-        #average = self.get_average_values(self.query_set)
+        # average = self.get_average_values(self.query_set)
         # small hack. in order to get the objects loaded we need to call for
         # queryset results once so simple len function does it
         len(self.result_list)
@@ -68,7 +69,7 @@ def write_pdf_view1(modeladmin, request, queryset):
         'Normal'], alignment=2, direction='RTL', encoding='utf8')
     header = Paragraph(ar, style_right)
     Catalog.append(header)
-    #style = styles['Normal']
+    # style = styles['Normal']
     img = 'C:/Users/SCM_User/test2/test3/static/test3/image/logo1.jpg'
     im = Image(img, 2*inch, 2*inch)
     Catalog.append(im)
@@ -80,12 +81,12 @@ def write_pdf_view1(modeladmin, request, queryset):
                                     'violations', 'kind_of_violation', 'date_of_violations', 'relation_with_org', 'summary_of_relations',
                                     'other_org_demand', 'name_org', 'date_of_demand_org', 'tyoe_of_demand_other_org', 'result_of_demand_other_org',
                                     'recmond_1', 'phon_1', 'email_1', 'recmond_2', 'phon_2', 'email_2',)
-    #titles=['id', 'الاسم الاخير','الاسم الاول','هل لديك وضع صحي خاص']
+    # titles=['id', 'الاسم الاخير','الاسم الاول','هل لديك وضع صحي خاص']
     for product in queryset:
         for i in range(30):
             ar1 = arabic_reshaper.reshape(str(product[i]))
             ar1 = get_display(ar1)
-            #ar2 = arabic_reshaper.reshape(str(titles[i]))
+            # ar2 = arabic_reshaper.reshape(str(titles[i]))
            # ar1=get_display(ar2)
            # p = Paragraph("%s" % ar2, style_right)
             p1 = Paragraph("%s" % ar1, style_right)
@@ -168,7 +169,6 @@ class SupportInlinechild(admin.StackedInline):
     ]
 
 
-
 # add the violations inline
 class ViolationInline(admin.TabularInline):
     model = Violation
@@ -196,6 +196,8 @@ class WorkDetailsInline(admin.TabularInline):
     ]
 
 # add the child support form
+
+
 class SupportInline(admin.StackedInline):
     model = SupportOrg
 
@@ -213,7 +215,7 @@ class CheckingInline1(admin.StackedInline):
     model = Checking
     fieldsets = [
         ['المعالجة', {
-            'fields': [('tiitle_of_state', 'urg_mark', 'confirm_stat'), ('date_of_updat', 'total_of_note')]
+            'fields': [('tiitle_of_state', ), ('urg_mark', 'confirm_stat'), ('date_of_updat', 'total_of_note')]
         }],
         ['الخطوة الأولى من التحقق', {
             'classes': ['first_step', 'collapse'],
@@ -245,14 +247,15 @@ class CheckingInline1(admin.StackedInline):
 
 
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display = ('user', 'profile','get_email','get_First_name','get_last_name','get_country','get_region','get_who_are_you','job','education_level',
-                   'type_of_dmande', 'support_org_state_1', 'created_at', 'state_step',)
+
+    list_display = ('user', 'get_email', 'get_First_name', 'get_last_name', 'get_country', 'get_region', 'get_who_are_you', 'job', 'education_level',
+                    'type_of_dmande', 'support_org_state_1', 'created_at', 'state_step',)
     # group fields in sub groups
     fieldsets = [
         ['المعالجة', {
             'classes': ['collapse'],
             'fields': [('state_step', 'support_org_state_1',), ]
-            
+
         }],
         ['معلومات شخصية', {
             'classes': ['collapse'],
@@ -265,7 +268,7 @@ class RegistrationAdmin(admin.ModelAdmin):
         ['معلومات العمل', {
             'classes': ['collapse'],
 
-            'fields': [('education_level', 'job'),  ('experience'),('if_stop_work', 'date_stop_work'),('org_memeber', 'details')]
+            'fields': [('education_level', 'job'),  ('experience'), ('if_stop_work', 'date_stop_work'), ('org_memeber', 'details')]
         }],
         ['ملخص يشرح حالتك وروابط من عملك', {
             'classes': ['collapse'],
@@ -277,12 +280,12 @@ class RegistrationAdmin(admin.ModelAdmin):
         }],
         ['أسئلة تحت طائلة المسؤولية', {
             'classes': ['collapse'],
-            'fields': [('other_org_demand'), ('name_org', 'date_of_demand_org'), ('result_of_demand_other_org'),('relation_with_org', 'summary_of_relations'), ]
+            'fields': [('other_org_demand'), ('name_org', 'date_of_demand_org'), ('result_of_demand_other_org'), ('relation_with_org', 'summary_of_relations'), ]
         }],
 
         ['نوع الدعم', {
             'classes': ['collapse'],
-            'fields': [('type_of_dmande'), ('resaon_for_help'), ('list_of_tools'), ('last_job_salary', 'reason_stopping_job'), ('summary_of_help'),('know_support_programme')]
+            'fields': [('type_of_dmande'), ('resaon_for_help'), ('list_of_tools'), ('last_job_salary', 'reason_stopping_job'), ('summary_of_help'), ('know_support_programme')]
         }],
     ]
     inlines = [
@@ -291,14 +294,24 @@ class RegistrationAdmin(admin.ModelAdmin):
     # custom for add inlinfrorm after sp field
     change_form_template = 'admin/custom/change_form.html'
     # filtering
-    list_filter = (('state_step', ChoiceDropdownFilter),  ('type_of_dmande',ChoiceDropdownFilter), ('family_state', ChoiceDropdownFilter), 
-                                                           ('education_level', ChoiceDropdownFilter),('job', ChoiceDropdownFilter),
-                                                           ('created_at',DateRangeFilter),
-                                                           ('profile__country', ChoiceDropdownFilter),('profile__region', ChoiceDropdownFilter),
-                                                           ('profile__who_are_you', ChoiceDropdownFilter),('violation__violation_type', ChoiceDropdownFilter),
-                                                           ('violations', ChoiceDropdownFilter),('relation_with_org', ChoiceDropdownFilter),
-                                                           ('medical_state_q', ChoiceDropdownFilter),('profile__gender', ChoiceDropdownFilter),('org_memeber', ChoiceDropdownFilter))
-    search_fields = ('job','user__first_name','user__last_name','user__email','profile__phone')
+    list_filter = (('state_step', ChoiceDropdownFilter), ('type_of_dmande', ChoiceDropdownFilter),
+                   ('family_state', ChoiceDropdownFilter),
+                   ('education_level', ChoiceDropdownFilter), ('job',
+                                                               ChoiceDropdownFilter),
+                   ('created_at', DateRangeFilter),
+                   ('profile__country', ChoiceDropdownFilter), ('profile__region',
+                                                                ChoiceDropdownFilter),
+                   ('profile__current_country', ChoiceDropdownFilter), (
+                       'profile__current_region', ChoiceDropdownFilter),
+                   ('profile__who_are_you', ChoiceDropdownFilter), (
+                       'violation__violation_type', ChoiceDropdownFilter),
+                   ('violations', ChoiceDropdownFilter), ('relation_with_org',
+                                                          ChoiceDropdownFilter),
+                   ('medical_state_q', ChoiceDropdownFilter), ('profile__gender',
+                                                               ChoiceDropdownFilter),
+                   ('org_memeber', ChoiceDropdownFilter))
+    search_fields = ('job', 'user__first_name',
+                     'user__last_name', 'user__email', 'profile__phone')
     actions = [write_pdf_view1, export_books, ]
     # def has_change_permission(self, request, obj=None):
     #       return False
@@ -310,7 +323,7 @@ class RegistrationAdmin(admin.ModelAdmin):
     #         obj.created_by = request.user
     #     obj.save()
 
-       # function to add placeholder to admin model without jquery
+    # function to add placeholder to admin model without jquery
     # def render_change_form(self, request, context, *args, **kwargs):
     #     form_instance = context['adminform'].form
     #     form_instance.fields['nick_name'].widget.attrs['placeholder'] = 'Your street'
@@ -323,27 +336,34 @@ class RegistrationAdmin(admin.ModelAdmin):
     #           return []
     def get_First_name(self, obj):
         return obj.user.first_name
-    def get_last_name(self,obj):
+
+    def get_last_name(self, obj):
         return obj.user.last_name
-    def get_country(self,obj):
-        return obj.profile.country
-    def get_region(self,obj):
-        return obj.profile.region 
-    def get_who_are_you(self,obj):
+
+    def get_country(self, obj):
+        return obj.profile.current_country
+
+    def get_region(self, obj):
+        return obj.profile.current_region
+
+    def get_who_are_you(self, obj):
         return obj.profile.get_who_are_you_display()
-    def get_violation(self,obj):
+
+    def get_violation(self, obj):
         return obj.violation.get_violation_type_display()
-    def get_email(self,obj):
-            return obj.user.email
+
+    def get_email(self, obj):
+        return obj.user.email
 
     get_First_name.short_description = 'الاسم الاول'
     get_last_name.short_description = 'الاسم الاخير'
     get_country.short_description = 'الدولة'
-    get_region.short_description='المحافظة'
-    get_who_are_you.short_description='هل أنت'
-    get_email.short_description='Email'
+    get_region.short_description = 'المحافظة'
+    get_who_are_you.short_description = 'هل أنت'
+    get_email.short_description = 'Email'
 
     list_per_page = 100
+
     class Media:
         js = ('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
               '../static/js/test_olde_1.js', '../static/js/work.js',)
@@ -355,14 +375,40 @@ class RegistrationAdmin(admin.ModelAdmin):
 
 
 class CheckingAdmin(admin.ModelAdmin):
-    list_display = ('registration', 'tiitle_of_state','get_F',
+    list_display = ('registration', 'tiitle_of_state', 'get_F', 'get_last_name', 'get_email', 'get_who_are_you', 'get_vio', 'get_work',
                     'urg_mark', 'confirm_stat', 'result_of_verfication')
     # group fields in sub groups
-    list_filter = ('result_of_verfication', ('date_of_updat',
-                                             DateRangeFilter), 'manitry_realtion')
-    search_fields = ('tiitle_of_state', 'urg_mark',)
+    list_filter = (('result_of_verfication', ChoiceDropdownFilter), ('registration__violation__violation_type', ChoiceDropdownFilter),
+                   ('registration__profile__who_are_you', ChoiceDropdownFilter), ('registration__job', ChoiceDropdownFilter),  ('date_of_updat',
+                                                                                                                                DateRangeFilter), 'manitry_realtion')
+    search_fields = ('tiitle_of_state', 'urg_mark', 'registration__user__first_name', 'registration__user__last_name', 'registration__user__email',
+                     'registration__user__username')
+
     def get_F(self, obj):
         return obj.registration.user.first_name
+
+    def get_last_name(self, obj):
+        return obj.registration.user.last_name
+
+    def get_email(self, obj):
+        return obj.registration.user.email
+
+    def get_who_are_you(self, obj):
+        return obj.registration.profile.get_who_are_you_display()
+
+    def get_vio(self, obj):
+        return obj.registration.get_violations_display()
+
+    def get_work(self, obj):
+        return obj.registration.get_experience_display()
+
+    get_F.short_description = _('الاسم اﻷول')
+    get_last_name.short_description = _('الاسم اﻷخير')
+    get_email.short_description = _('البريد الالكتروني')
+    get_who_are_you.short_description = _('من أنت ؟')
+    get_vio.short_description = _('هل تعرض لانتهاكات؟')
+    get_work.short_description = _('هل عمل بأجر ؟')
+
 
 class LogAdmin(admin.ModelAdmin):
     """Create an admin view of the history/log table"""

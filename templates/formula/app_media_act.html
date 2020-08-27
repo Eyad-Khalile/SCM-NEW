@@ -11,7 +11,12 @@
             enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset>
-                <!-- {{ u_app.media }} -->
+
+
+
+
+
+                {{ registerForm.media }}
                 <div class="card card-form rounded p-4 mt-4 mb-4 medical-info">
                     <button class="btn btn-info w-25 mb-4" type="button" data-toggle="collapse"
                         data-target="#collapseMedicalInfo" aria-expanded="false" aria-controls="collapseMedicalInfo">
@@ -19,10 +24,10 @@
                     </button>
                     <div class="collapse" id="collapseMedicalInfo">
                         <div class="form-group">
-                            {{ u_app.medical_state_q|as_crispy_field }}
+                            {{ registerForm.medical_state_q|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.medical_state_des|as_crispy_field }}
+                            {{ registerForm.medical_state_des|as_crispy_field }}
                         </div>
                     </div>
                 </div>
@@ -35,16 +40,16 @@
                     </button>
                     <div class="collapse" id="collapseFamilyStatus">
                         <div class="form-group">
-                            {{ u_app.family_state|as_crispy_field }}
+                            {{ registerForm.family_state|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.have_kids|as_crispy_field }}
+                            {{ registerForm.have_kids|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.number_kids|as_crispy_field }}
+                            {{ registerForm.number_kids|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.summary_family|as_crispy_field }}
+                            {{ registerForm.summary_family|as_crispy_field }}
                         </div>
                     </div>
 
@@ -58,13 +63,13 @@
                     </button>
                     <div class="collapse" id="collapseWorkStatus">
                         <div class="form-group">
-                            {{ u_app.education_level|as_crispy_field }}
+                            {{ registerForm.education_level|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.job|as_crispy_field }}
+                            {{ registerForm.job|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.experience|as_crispy_field }}
+                            {{ registerForm.experience|as_crispy_field }}
                         </div>
 
                         <!-- INLINE FORM EXPERIENCE -->
@@ -72,24 +77,30 @@
                             <h2 class="mb-0">أضافة خبرات عمل سابقة </h2>
                             <hr>
 
-                            {{ u_exper.management_form }}
-                            <div id="form_set">
-                                {% for form in u_exper %}
+                            {{ expForm.media }}
+                            <!-- {{ expForm|crispy }} -->
+
+
+                            {{ expForm.management_form|crispy }}
+                            <div id="form_set_ex">
+                                {% for form in expForm %}
+                                {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                                {% endfor %}
                                 {{form.non_field_errors}}
                                 {{form.errors}}
-                                <table class='no_error mb-5 pb-5'>
-                                    {{ form }}
+                                <table class='no_error'>
                                 </table>
                                 {% endfor %}
                             </div>
 
-                            <input type="button" value="{% trans 'إضافى خبرة عمل' %}" class="btn btn-info"
-                                id="add_more">
+                            <input type="button" value="{% trans 'إضافة خبرة عمل' %}" class="btn btn-info"
+                                id="add_more_ex">
 
-                            <div id="empty_form" style="display:none">
+                            <div id="empty_form_ex" style="display:none">
                                 <table class='no_error'>
-                                    <div class="form-group mt-5 mb-5 pt-5 pb-5">
-                                        {{ u_exper.empty_form }}
+                                    <div class="form-group px-2 mt-2 mb-2 pt-2 pb-2">
+                                        {{ expForm.empty_form|crispy }}
                                     </div>
                                 </table>
                             </div>
@@ -97,10 +108,10 @@
                         </div>
 
                         <div class="form-group">
-                            {{ u_app.org_memeber|as_crispy_field }}
+                            {{ registerForm.org_memeber|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.details|as_crispy_field }}
+                            {{ registerForm.details|as_crispy_field }}
                         </div>
                     </div>
                 </div>
@@ -113,46 +124,46 @@
                     </button>
                     <div class="collapse" id="collapseSummaryExSt">
                         <div class="form-group">
-                            {{ u_app.if_article_linke|as_crispy_field }}
+                            {{ registerForm.if_article_linke|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.articls_link_1|as_crispy_field }}
+                            {{ registerForm.articls_link_1|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.if_stop_work|as_crispy_field }}
+                            {{ registerForm.if_stop_work|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.date_stop_work|as_crispy_field }}
+                            {{ registerForm.date_stop_work|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.resource_prof|as_crispy_field }}
+                            {{ registerForm.resource_prof|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.recmond_1|as_crispy_field }}
+                            {{ registerForm.recmond_1|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.phon_1|as_crispy_field }}
+                            {{ registerForm.phon_1|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.email_1|as_crispy_field }}
+                            {{ registerForm.email_1|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.recmond_2|as_crispy_field }}
+                            {{ registerForm.recmond_2|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.phon_2|as_crispy_field }}
+                            {{ registerForm.phon_2|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.email_2|as_crispy_field }}
+                            {{ registerForm.email_2|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.training_media|as_crispy_field }}
+                            {{ registerForm.training_media|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.details_traning_media|as_crispy_field }}
+                            {{ registerForm.details_traning_media|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.summary_of_your_state|as_crispy_field }}
+                            {{ registerForm.summary_of_your_state|as_crispy_field }}
                         </div>
                     </div>
                 </div>
@@ -165,13 +176,52 @@
                     </button>
                     <div class="collapse" id="collapseViola">
                         <div class="form-group">
-                            {{ u_app.violations|as_crispy_field }}
+                            {{ registerForm.violations|as_crispy_field }}
+                        </div>
+
+
+                        <!-- INLINE FORM VIOLATIONS -->
+                        <div class="form-vio mb-2 pb-2 card bg-light col-8">
+                            <h2 class="mb-0">أضافة إنتهاك </h2>
+                            <hr>
+
+                            {{ vioForm.media }}
+                            <!-- {{ vioForm|crispy }} -->
+
+
+                            {{ vioForm.management_form|crispy }}
+                            <div id="form_set_vio">
+                                {% for form in vioForm %}
+                                {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                                {% endfor %}
+                                {{form.non_field_errors}}
+                                {{form.errors}}
+                                <table class='no_error'>
+                                </table>
+                                {% endfor %}
+                            </div>
+
+                            <input type="button" value="{% trans 'إضافة إنتهاك' %}" class="btn btn-info"
+                                id="add_more_vio">
+
+                            <div id="empty_form_vio" style="display:none">
+                                <table class='no_error'>
+                                    <div class="form-group px-2 mt-2 mb-2 pt-2 pb-2">
+                                        {{ vioForm.empty_form|crispy }}
+                                    </div>
+                                </table>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+                            {{ registerForm.relation_with_org|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.relation_with_org|as_crispy_field }}
-                        </div>
-                        <div class="form-group">
-                            {{ u_app.summary_of_relations|as_crispy_field }}
+                            {{ registerForm.summary_of_relations|as_crispy_field }}
                         </div>
                     </div>
                 </div>
@@ -184,22 +234,22 @@
                     </button>
                     <div class="collapse" id="collapseAutrStat">
                         <div class="form-group">
-                            {{ u_app.other_org_demand|as_crispy_field }}
+                            {{ registerForm.other_org_demand|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.name_org|as_crispy_field }}
+                            {{ registerForm.name_org|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.date_of_demand_org|as_crispy_field }}
+                            {{ registerForm.date_of_demand_org|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.type_of_demand_other_org|as_crispy_field }}
+                            {{ registerForm.type_of_demand_other_org|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.result_of_demand_other_org|as_crispy_field }}
+                            {{ registerForm.result_of_demand_other_org|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.know_support_programme|as_crispy_field }}
+                            {{ registerForm.know_support_programme|as_crispy_field }}
                         </div>
                     </div>
                 </div>
@@ -212,22 +262,22 @@
                     </button>
                     <div class="collapse" id="collapseTypeSupport">
                         <div class="form-group">
-                            {{ u_app.type_of_dmande|as_crispy_field }}
+                            {{ registerForm.type_of_dmande|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.resaon_for_help|as_crispy_field }}
+                            {{ registerForm.resaon_for_help|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.list_of_tools|as_crispy_field }}
+                            {{ registerForm.list_of_tools|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.last_job_salary|as_crispy_field }}
+                            {{ registerForm.last_job_salary|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.reason_stopping_job|as_crispy_field }}
+                            {{ registerForm.reason_stopping_job|as_crispy_field }}
                         </div>
                         <div class="form-group">
-                            {{ u_app.summary_of_help|as_crispy_field }}
+                            {{ registerForm.summary_of_help|as_crispy_field }}
                         </div>
                     </div>
                 </div>

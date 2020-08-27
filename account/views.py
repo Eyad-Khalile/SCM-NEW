@@ -15,6 +15,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.forms import formset_factory
+from django.forms import formset_factory, modelformset_factory, inlineformset_factory
 
 
 # ::::::::::: HOME PAGE :::::::::
@@ -229,39 +230,69 @@ DEFAULT_MAX_NUM = 1000
 
 
 # ::::::::::::::::: APPLICATION FOR MEDIA ACTIVIST ::::::::::::::::::
+@login_required(login_url='login')
 def app_media_act(request, user_id):
 
-    if request.method == 'POST':
-        # u_update = UpdateUserForm(request.POST or None, instance=request.user)
-        # u_profile = ProfileForm(
-        #     request.POST or None, request.FILES or None, instance=request.user.profile)
-        u_app = MediaActForm(request.POST or None)
-        u_exper = formset_factory(request.POST or None, ExperForm, extra=1)
-        # u_violation = ViolationForm(request.POST or None)
-
-        if u_app.is_valid() and u_exper.is_valid():
-            user_app = u_app.save(commit=False)
-            user_app.user = request.user.id
-            user_app.save()
-            # u_violation.save()
-            for form in u_exper:
-                form.save()
-
-            messages.success(
-                request, _('لقد تم تقديم الطلب بنجاح'))
-            return redirect('home')
+    register = RegisterMediaAct.objects.last()
+    if register:
+        reg_id = register.id + 1
     else:
-        # u_update = UpdateUserForm(instance=request.user)
-        # u_profile = ProfileForm(instance=request.user.profile)
-        u_app = MediaActForm()
-        u_exper = ExperForm()
-        # u_violation = ViolationForm()
+        reg_id = 1
+    # reg_id = register.id + 1
+    # reg_id = 1
+
+    ExFormset = modelformset_factory(
+        WorkDetail, form=ExperForm, extra=11)
+    VioFormset = modelformset_factory(
+        Violation, form=ViolationForm, extra=11)
+
+    if request.method == 'POST':
+        registerForm = MediaActForm(request.POST or None)
+        # expForm = ExFormset(request.POST or None, queryset=WorkDetail.objects.filter(worker__id=user_id))
+        # vioForm = VioFormset(request.POST or None, queryset=Violation.objects.filter(victim__id=user_id))
+        expForm = ExFormset(request.POST or None,
+                            queryset=WorkDetail.objects.none())
+        vioForm = VioFormset(request.POST or None,
+                             queryset=WorkDetail.objects.none())
+
+        if registerForm.is_valid() and expForm.is_valid() and vioForm.is_valid():
+            reg_user = registerForm.save(commit=False)
+            reg_user.user = request.user
+            reg_user.profile = request.user.profile
+            reg_user.save()
+            registerForm = MediaActForm()
+
+            instances = expForm.save(commit=False)
+            for instance in instances:
+                instance.registration_media_act_id = reg_id
+                instance.worker_id = request.user.id
+                instance.save()
+
+            inst_vio = vioForm.save(commit=False)
+            for inst in inst_vio:
+                inst.violation_id = reg_id
+                inst.victim_id = request.user.id
+                inst.save()
+
+            messages.success(request, _('لقد تم تقديم الطلب بنجاح'))
+
+            return redirect('app_media_act', user_id)
+        else:
+            messages.warning(request, _('the forms are not valide :( '))
+
+    else:
+        registerForm = MediaActForm()
+        # expForm = ExFormset(
+        #     queryset=WorkDetail.objects.filter(worker__id=user_id))
+        # vioForm = VioFormset(
+        #     queryset=Violation.objects.filter(victim__id=user_id))
+        expForm = ExFormset(queryset=WorkDetail.objects.none())
+        vioForm = VioFormset(queryset=WorkDetail.objects.none())
 
     context = {
-        # 'u_update': u_update,
-        # 'u_profile': u_profile,
-        'u_app': u_app,
-        'u_exper': u_exper,
+        'registerForm': registerForm,
+        'expForm': expForm,
+        'vioForm': vioForm,
     }
 
     return render(request, 'formula/app_media_act.html', context)

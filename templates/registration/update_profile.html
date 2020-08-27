@@ -4,7 +4,7 @@
 
 <div class="container">
   <div class="card rounded mt-5 px-5 pt-5 pb-5">
-    <h1 class="mb-4 pt-0"> {% trans 'رحاءً, أتمم ملفك الشخصي' %} </h1>
+    <h1 class="mb-4 pt-0"> {% trans 'رجاءً, أتمم ملفك الشخصي' %} </h1>
 
 
     <form action="" method="post" class="form-profile mw-80 registration-form change-color px-5 pt-5 pb-5"
@@ -47,6 +47,9 @@
         </div>
         <div class="form-group">
           {{ u_profile.current_region|as_crispy_field }}
+        </div>
+        <div class="form-group">
+          {{ u_profile.current_area|as_crispy_field }}
         </div>
         <div class="form-group">
           {{ u_profile.phone|as_crispy_field }}

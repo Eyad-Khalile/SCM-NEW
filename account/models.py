@@ -62,13 +62,17 @@ class Profile(models.Model):
     current_region = models.CharField(
         max_length=100, choices=city_CHOICES, null=True, blank=True, verbose_name=_('في أي محافظة ؟'))
 
+    current_area = models.CharField(
+        max_length=255, null=True, blank=True, verbose_name=_('من اي منطقة ؟'))
+
     who_are_you = models.CharField(
         max_length=100, choices=user_CHOICES, verbose_name=_("هل أنت ؟"))
     image = models.ImageField(
         default='default.jpg', upload_to='profile_pics', verbose_name=_("صورة شخصية"))
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        # return f'{self.user.username, self.user.first_name} Profile'
+        return '%s %s' % (self.user.first_name, self.user.last_name) + ' من ' + '%s' % (self.region)
 
 
 # ::::::::::::::::::::: CREATE USER PROFILE AUTO :::::::::::::::::::::::
@@ -94,8 +98,9 @@ class Support_descrption(models.Model):
 
     def __str__(self):
         return self.suppo
+
     class Meta:
-            verbose_name_plural =_('الجهات المحولة ')
+        verbose_name_plural = _('الجهات المحولة ')
 
 
 # ::::::::::::::::::: REGISTERATION MEDIA ACTIVIST :::::::::::::::::::::::
@@ -175,12 +180,13 @@ class RegisterMediaAct(models.Model):
         ('3', _('الخطوة الثانية')),
         ('4', _('الخطوة الثالثة')),
         ('5', _('تمت المعالجة')),
-        
+
 
     )
-    #connect with user and profiele models 
+    # connect with user and profiele models
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    profile = models.ForeignKey(Profile, default=None, on_delete=models.CASCADE)
+    profile = models.ForeignKey(
+        Profile, default=None, on_delete=models.CASCADE)
 
     # :::::::::::: FAMILY STATE :::::::::::
     family_state = models.CharField(
@@ -291,15 +297,19 @@ class RegisterMediaAct(models.Model):
     state_step = models.CharField(
         _("المعالجة"), max_length=30, blank=True, default=1, choices=procesc_CHOICES, null=True)
     support_org_state_1 = models.ForeignKey(
-        Support_descrption, null=True, default=1, blank=True, on_delete=models.CASCADE, verbose_name=_("الجهة المحولة"))
+        Support_descrption, null=True, blank=True, on_delete=models.CASCADE, verbose_name=_("الجهة المحولة"))
 
     created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
-        return self.user.email
+        return self.user.username
+
     class Meta:
-        verbose_name_plural =_('طلبات الافراد الإعلامين')
+        verbose_name_plural = _('طلبات الافراد الإعلامين')
 
 # ::::::::::::::::::: EXPERIENCE ::::::::::::::::::::::::
+
+
 class WorkDetail(models.Model):
     bool_CHOICES = (
         ('0', 'لا'),
@@ -308,22 +318,25 @@ class WorkDetail(models.Model):
 
     registration_media_act = models.ForeignKey(
         RegisterMediaAct, null=False, related_name="registration_media_act", on_delete=models.CASCADE)
+    worker = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.CASCADE)
     org_name = models.CharField(
-        max_length=255, null=False, verbose_name="اسم الجهة المشغلة")
+        max_length=255, null=False, blank=True, verbose_name="اسم الجهة المشغلة")
     job_title = models.CharField(
-        max_length=255, null=False, verbose_name="المسمى الوظيفي")
+        max_length=255, null=False, blank=True, verbose_name="المسمى الوظيفي")
     job_location = models.CharField(
-        max_length=255, null=False, verbose_name="مكان العمل")
+        max_length=255, null=True, blank=True, verbose_name="مكان العمل")
     start_date = models.DateField(
-        verbose_name='تاريخ بدء العمل', null=False)
+        verbose_name='تاريخ بدء العمل', null=True, blank=True)
     until_now = models.CharField(
-        choices=bool_CHOICES, verbose_name="هل تعمل حتى اﻵن ؟", null=False, max_length=100)
+        choices=bool_CHOICES, verbose_name="هل تعمل حتى اﻵن ؟", null=True, blank=True, max_length=100)
     end_date = models.DateField(
-        verbose_name="تاريخ انتهاء العمل", null=True)
+        verbose_name="تاريخ انتهاء العمل", null=True, blank=True)
     if_salary = models.CharField(
-        choices=bool_CHOICES, verbose_name="هل كنت تعمل بأجر ؟", null=False, max_length=100)
+        choices=bool_CHOICES, verbose_name="هل كنت تعمل بأجر ؟", null=True, blank=True, max_length=100)
     salary = models.CharField(
-        max_length=255, null=True, verbose_name="اذكر آخر راتب تقاضيته من هذا العمل")
+        max_length=255, null=True, blank=True, verbose_name="اذكر آخر راتب تقاضيته من هذا العمل")
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.job_title
@@ -350,15 +363,19 @@ class Violation(models.Model):
         ('4', _('داعش')),
         ('5', _('غير ذلك'))
     )
+
     violation = models.ForeignKey(RegisterMediaAct, on_delete=models.CASCADE)
+    victim = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     violation_type = models.CharField(
-        max_length=200, choices=violation_CHOICES, null=True, verbose_name='نوع الانتهاك')
+        max_length=200, choices=violation_CHOICES, null=True, blank=True, verbose_name='نوع الانتهاك')
     date_of_violation = models.DateField(
-        verbose_name="تاريخ الانتهاك ", blank=True)
+        verbose_name="تاريخ الانتهاك ", blank=True, null=True)
     responsibility = models.TextField(max_length=500, choices=responsibility_CHOICES,
-                                       null=True, verbose_name="من هي الجهة المسؤولة عن الانتهاك؟")
+                                      null=True, blank=True, verbose_name="من هي الجهة المسؤولة عن الانتهاك؟")
+    created_at = models.DateTimeField(auto_now_add=True)
+
     class Meta:
-        verbose_name_plural=_('الانتهاكات')
+        verbose_name_plural = _('الانتهاكات')
 
 # :::::::::::::::::: DOCS :::::::::::::::::::::::
 
@@ -373,7 +390,7 @@ class docs(models.Model):
     )
 
     class Meta:
-        verbose_name_plural =_('ارفاق  ملفات')
+        verbose_name_plural = _('ارفاق  ملفات')
 
 
 # evalutions model procesing steps
@@ -513,8 +530,11 @@ class Checking(models.Model):
         return super(Checking, self).save(*args, **kwargs)
 # model to add attach documents
 # here is the test commite to gethub for sure
+
     class Meta:
         verbose_name_plural = 'التحقق'
+
+
 class CaseFile(models.Model):
     # When a Case is deleted, upload models are also deleted
     case = models.ForeignKey(RegisterMediaAct, on_delete=models.CASCADE)
@@ -524,9 +544,9 @@ class CaseFile(models.Model):
 
     def __unicode__(self):
         return self.case
-    class Meta:
-            verbose_name_plural =_('صندوق الوثائق')
 
+    class Meta:
+        verbose_name_plural = _('صندوق الوثائق')
 
 
 class SupportOrg(models.Model):
@@ -553,8 +573,10 @@ class SupportOrg(models.Model):
         max_length=255, null=True, blank=True, choices=result_of_org_CHOICES, default=False, verbose_name="النتيجة")
     date_of_result = models.DateField(
         verbose_name="تاريخ الإحالة ", blank=True, null=True)
+
     class Meta:
-            verbose_name_plural =_('الاستجابة')
+        verbose_name_plural = _('الاستجابة')
+
 
 class SupportOrgchild(models.Model):
     support = models.ForeignKey(RegisterMediaAct, on_delete=models.CASCADE)
@@ -562,8 +584,8 @@ class SupportOrgchild(models.Model):
                                  on_delete=models.CASCADE, verbose_name="الجهة الداعمة ")
     cost = models.DecimalField(max_digits=10, decimal_places=2,
                                null=True, blank=True, verbose_name="التكلفة مقدرة باليورو")
+
     class Meta:
-            verbose_name_plural =_('الجهات الداعمة')
+        verbose_name_plural = _('الجهات الداعمة')
 
 # model to add violation to the registration form or application
-    

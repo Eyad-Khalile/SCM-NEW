@@ -33,40 +33,40 @@ $(document).ready(function () {
     var text = $("#id_articls_link_1").val();
 });
 // function to states processing 
-$( document ).ready( function() {
+$(document).ready(function () {
     $(function () {
         $('.first_step').hide();
         $('.second_step').hide();
         $('.third_step').hide();
         $('.forth_step').hide();
         $('.upload_files').hide();
-    
-    
-    // $('.abcdefgh').hide();
+
+
+        // $('.abcdefgh').hide();
         $('#id_state_step').change(function () {
-          $('.upload_files').hide();
+            $('.upload_files').hide();
             // $('.abcdefgh').hide();
-            if (this.options[this.selectedIndex].value =='2') {
+            if (this.options[this.selectedIndex].value == '2') {
                 $('.first_step').show();
-                
+
             }
-            if (this.options[this.selectedIndex].value =='3') {
+            if (this.options[this.selectedIndex].value == '3') {
                 $('.second_step').show();
             }
-            if (this.options[this.selectedIndex].value =='4') {
-              $('.third_step').show();
-          }
-          if (this.options[this.selectedIndex].value =='5') {
-            $('.forth_step').show();
-        }
-        if (this.options[this.selectedIndex].value =='5') {
-          $('.upload_files').show();
-      }
-      
-        }); 
-      
+            if (this.options[this.selectedIndex].value == '4') {
+                $('.third_step').show();
+            }
+            if (this.options[this.selectedIndex].value == '5') {
+                $('.forth_step').show();
+            }
+            if (this.options[this.selectedIndex].value == '5') {
+                $('.upload_files').show();
+            }
+
+        });
+
     });
-    });
+});
 //function to hide yes and no qustions from regestration admin interface
 /////////////////////////////////////////////////////////////////////////
 $(document).ready(function () {
@@ -393,7 +393,7 @@ $(document).ready(function () {
 
         // SUPPORT TECHNIQUE
         $('div.form-row.field-list_of_tools').hide();
-        if ($('#id_type_of_dmande').val() == '8' ) {
+        if ($('#id_type_of_dmande').val() == '8') {
             $('div.form-row.field-list_of_tools').show();
         }
 
@@ -472,6 +472,7 @@ $(document).ready(function () {
                     break;
             }
         });
+
 
 
 
@@ -621,10 +622,10 @@ $(document).ready(function () {
                         "label[for=id_details_traning_media],#id_details_traning_media"
                     ).hide();
                     break;
-                // default:
-                //     $(
-                //         "label[for=id_details_traning_media],#id_details_traning_media"
-                //     ).hide();
+                    // default:
+                    //     $(
+                    //         "label[for=id_details_traning_media],#id_details_traning_media"
+                    //     ).hide();
             }
         });
     });
@@ -890,15 +891,23 @@ $(document).ready(function () {
 $(document).ready(function () {
     //for fill field
     //$('##id_first_name').removeAttr('readonly');
-    $("#id_checking-0-tiitle_of_state").val(
-        $("#id_first_name").val() +
-        " " +
-        $("#id_last_name").val() +
-        " " +
-        "من" +
-        "  " +
-        $("#id_city").val()
+    // $("#id_checking-0-tiitle_of_state").val(
+    //     $("#id_first_name").val() +
+    //     " " +
+    //     $("#id_last_name").val() +
+    //     " " +
+    //     "من" +
+    //     "  " +
+    //     $("#id_city").val()
+    // );
+
+    $('#id_checking-0-tiitle_of_state').addClass('w-50');
+    $('#id_checking-0-tiitle_of_state').val(
+        $('#id_profile option:selected').text()
     );
+
+
+
     //$('#id_first_name').add('readonly');
     //family number into family state
     $("#id_checking-0-family_state_1").val($("#id_number_kids").val());
@@ -917,7 +926,7 @@ $(document).ready(function () {
     var media_memeber = $("#id_org_memeber").val();
     var medical_state = $("#id_medical_state_q").val();
     var paid1_job = $("#id_experience").val();
-    var violation_q= $("#id_violations").val();
+    var violation_q = $("#id_violations").val();
 
     var a = parseInt($("#id_checking-0-member_in_journal").val());
     var b = parseInt($("#id_checking-0-educatton_level_1").val());
@@ -971,7 +980,7 @@ $(document).ready(function () {
             break;
         case "4":
             $("#id_checking-0-educatton_level_1").val("3");
-                break;
+            break;
         default:
             $("#id_checking-0-educatton_level_1").val("0");
     }
@@ -1020,6 +1029,6 @@ $(document).ready(function () {
         default:
             $("#id_checking-0-hase_violants").val("0");
     }
-    
+
 });
 django.jQuery;

@@ -59,7 +59,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('gender', 'nickname', 'birth_date',
-                  'birth_place', 'country', 'region', 'current_country', 'current_region', 'phone', 'facebook', 'who_are_you', 'image')
+                  'birth_place', 'country', 'region', 'current_country', 'current_region', 'current_area', 'phone', 'facebook', 'who_are_you', 'image')
         labels = {
             'gender': _('الجنس'),
         }
