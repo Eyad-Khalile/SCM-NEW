@@ -1,3 +1,6 @@
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+
 from django.contrib import admin
 from .models import *
 
@@ -20,6 +23,25 @@ from django_admin_listfilter_dropdown.filters import DropdownFilter, ChoiceDropd
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from django.utils.translation import ugettext_lazy as _
 
+
+# :::::::::::: CONF ADMIN ::::::::::::
+class MyUserAdmin(UserAdmin):
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        field = super(MyUserAdmin, self).formfield_for_dbfield(
+            db_field, **kwargs)
+        user = kwargs['request'].user
+        if not user.is_superuser:
+            if db_field.name == 'is_superuser':
+                field.widget.attrs = {'disabled': 'disabled'}
+        return field
+
+
+admin.site.unregister(User)
+admin.site.register(User, MyUserAdmin)
+
+
+# :::::::::::: START L'APPLICATION ::::::::::::
 
 class TotalAveragesChangeList(ChangeList):
     # provide the list of fields that we need to calculate averages and totals

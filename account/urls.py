@@ -35,8 +35,8 @@ urlpatterns = [
     path('profile/<str:user_id>',
          views.user_profile, name='profile'),
 
-#     path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-#          views.activate, name='activate'),
+    path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+         views.activate, name='activate'),
 
     # formula
     path('app_media_act/<str:user_id>',
