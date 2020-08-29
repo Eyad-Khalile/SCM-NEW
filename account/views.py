@@ -63,50 +63,67 @@ def contact_success(request):
 
 # ::::::::::: SIGN-UP / REGISTER :::::::::
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
 
-    if request.method == 'POST':
-        user_form = UserRegistrationForm(request.POST or None)
-        user_email = request.POST.get('email')
+        users = User.objects.all()
+        emails = []
+        for user in users:
+            emails += user.email,
 
-        if user_form.is_valid():
-            # Create a new user object but avoid saving it yet
-            new_user = user_form.save(commit=False)
-            new_user.is_active = False
-            # Set the chosen password
-            new_user.set_password(
-                user_form.cleaned_data['password'])
-            # Save the User object
-            new_user.save()
+        if request.method == 'POST':
+            user_form = UserRegistrationForm(request.POST or None)
+            user_email = request.POST.get('email')
+
+            if user_email not in emails:
+
+                if user_form.is_valid():
+                    # Create a new user object but avoid saving it yet
+                    new_user = user_form.save(commit=False)
+                    new_user.is_active = False
+                    # Set the chosen password
+                    new_user.set_password(
+                        user_form.cleaned_data['password'])
+                    # Save the User object
+                    new_user.save()
+                    user_form = UserRegistrationForm()
+
+                    current_site = get_current_site(request)
+                    mail_subject = 'Activate your blog account.'
+                    message = render_to_string('registration/acc_active_email.html', {
+                        'user': new_user,
+                        'domain': current_site.domain,
+                        'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
+                        'token': account_activation_token.make_token(new_user),
+                    })
+                    to_email = user_email
+                    email = EmailMessage(
+                        mail_subject, message, to=[to_email]
+                    )
+                    email.send()
+                    # return HttpResponse('Please confirm your email address to complete the registration')
+                    messages.success(request, _(
+                        'لقد تم أرسال بريد الكتروني يتضمن رابط لتأكيد التسجيل , يرجى التحقق من البريد لتتمكن من  تسجيل الدخول'))
+                    return redirect('home')
+
+                    # return render(request,
+                    #               'registration/register_done.html',
+                    #               {'new_user': new_user})
+
+            else:
+                if user_email in emails:
+                    messages.warning(
+                        request, f'رحاءً , انشئ حساب باستخدام بريد الكتروني آخر, هذا البريد الاكتروني {user_email} مستخدم ')
+        else:
             user_form = UserRegistrationForm()
 
-            current_site = get_current_site(request)
-            mail_subject = 'Activate your blog account.'
-            message = render_to_string('registration/acc_active_email.html', {
-                'user': new_user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
-                'token': account_activation_token.make_token(new_user),
-            })
-            to_email = user_email
-            email = EmailMessage(
-                mail_subject, message, to=[to_email]
-            )
-            email.send()
-            return HttpResponse('Please confirm your email address to complete the registration')
-
-            # return render(request,
-            #               'registration/register_done.html',
-            #               {'new_user': new_user})
-    else:
-        user_form = UserRegistrationForm()
-
-    context = {
-        'user_form': user_form,
-    }
-
-    return render(request,
-                  'registration/register.html',
-                  context)
+        context = {
+            'user_form': user_form,
+        }
+        return render(request,
+                      'registration/register.html',
+                      context)
 
 
 # ::::::::::: REGISTER ACTIVATION BY E-MAIL :::::::::
@@ -120,33 +137,41 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        # return redirect('home')
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+
+        # return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        messages.success(request, _(
+            'شكرا لتأكيد بريدك الالكتروني , اﻵن يمكنك تسجيل الدخول'))
+        return redirect('login')
     else:
-        return HttpResponse('Activation link is invalid!')
+        # return HttpResponse('Activation link is invalid!')
+        messages.warning(request, _('رابط التحقق غير فعال'))
+        return redirect('home')
 
 
 # ::::::::::: LOGIN :::::::::
 def user_login(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            user = authenticate(request,
-                                username=cd['username'],
-                                password=cd['password'])
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return HttpResponse('Authenticated '
-                                        'successfully')
-                else:
-                    return HttpResponse('Disabled account')
-            else:
-                return HttpResponse('Invalid login')
+    if request.user.is_authenticated:
+        return redirect('home')
     else:
-        form = LoginForm()
-    return render(request, 'registration/login.html', {'form': form})
+        if request.method == 'POST':
+            form = LoginForm(request.POST)
+            if form.is_valid():
+                cd = form.cleaned_data
+                user = authenticate(request,
+                                    username=cd['username'],
+                                    password=cd['password'])
+                if user is not None:
+                    if user.is_active:
+                        login(request, user)
+                        return HttpResponse('Authenticated '
+                                            'successfully')
+                    else:
+                        return HttpResponse('Disabled account')
+                else:
+                    return HttpResponse('Invalid login')
+        else:
+            form = LoginForm()
+        return render(request, 'registration/login.html', {'form': form})
 
 
 # ::::::::::: USER PROFILE :::::::::
@@ -233,14 +258,6 @@ DEFAULT_MAX_NUM = 1000
 @login_required(login_url='login')
 def app_media_act(request, user_id):
 
-    register = RegisterMediaAct.objects.last()
-    if register:
-        reg_id = register.id + 1
-    else:
-        reg_id = 1
-    # reg_id = register.id + 1
-    # reg_id = 1
-
     ExFormset = modelformset_factory(
         WorkDetail, form=ExperForm, extra=11)
     VioFormset = modelformset_factory(
@@ -254,8 +271,9 @@ def app_media_act(request, user_id):
                             queryset=WorkDetail.objects.none())
         vioForm = VioFormset(request.POST or None,
                              queryset=WorkDetail.objects.none())
+        upForm = UploadForm(request.POST or None, request.FILES or None)
 
-        if registerForm.is_valid() and expForm.is_valid() and vioForm.is_valid():
+        if registerForm.is_valid() and expForm.is_valid() and vioForm.is_valid() and upForm.is_valid():
             reg_user = registerForm.save(commit=False)
             reg_user.user = request.user
             reg_user.profile = request.user.profile
@@ -264,15 +282,25 @@ def app_media_act(request, user_id):
 
             instances = expForm.save(commit=False)
             for instance in instances:
-                instance.registration_media_act_id = reg_id
+                instance.registration_media_act = reg_user
                 instance.worker_id = request.user.id
                 instance.save()
 
             inst_vio = vioForm.save(commit=False)
             for inst in inst_vio:
-                inst.violation_id = reg_id
+                inst.violation = reg_user
                 inst.victim_id = request.user.id
                 inst.save()
+
+            for field in request.FILES.keys():
+                print('field  ==== : ', field)
+                filename = request.FILES[field]
+                print('filename  ==== : ', filename)
+                for formfile in request.FILES.getlist(field):
+                    print('formfile  ==== : ',  formfile)
+                    doc = docs(docs=reg_user, doc=formfile)
+                    doc.save()
+                    upForm = UploadForm()
 
             messages.success(request, _('لقد تم تقديم الطلب بنجاح'))
 
@@ -288,11 +316,13 @@ def app_media_act(request, user_id):
         #     queryset=Violation.objects.filter(victim__id=user_id))
         expForm = ExFormset(queryset=WorkDetail.objects.none())
         vioForm = VioFormset(queryset=WorkDetail.objects.none())
+        upForm = UploadForm()
 
     context = {
         'registerForm': registerForm,
         'expForm': expForm,
         'vioForm': vioForm,
+        'upForm': upForm,
     }
 
     return render(request, 'formula/app_media_act.html', context)

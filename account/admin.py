@@ -1,5 +1,6 @@
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission, User, Group
+
 
 from django.contrib import admin
 from .models import *
@@ -24,24 +25,45 @@ from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from django.utils.translation import ugettext_lazy as _
 
 
+# ::::::::::::: CONF ADMIN PAGE TITLE ::::::::::::::
+admin.site.site_header = _('إدارة موقع SCM ')
+admin.site.site_title = _('إدارة موقع SCM ')
+# admin.site.site_url = 'TEST'
+# admin.site.index_title = "Welcom"
+
 # :::::::::::: CONF ADMIN ::::::::::::
+# https://docs.djangoproject.com/fr/1.11/_modules/django/contrib/admin/options/
+
+
 class MyUserAdmin(UserAdmin):
 
     def formfield_for_dbfield(self, db_field, **kwargs):
+
         field = super(MyUserAdmin, self).formfield_for_dbfield(
             db_field, **kwargs)
         user = kwargs['request'].user
         if not user.is_superuser:
             if db_field.name == 'is_superuser':
                 field.widget.attrs = {'disabled': 'disabled'}
+
+                class Media:
+                    js = ('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
+                          '../static/js/permission.js')
+                    css = {
+                        # 'all': (
+                        #     '../static/css/admin.css',
+                        # )
+                    }
         return field
 
 
 admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
+# admin.site.unregister(Permission)
 
 
 # :::::::::::: START L'APPLICATION ::::::::::::
+
 
 class TotalAveragesChangeList(ChangeList):
     # provide the list of fields that we need to calculate averages and totals
@@ -446,7 +468,10 @@ class LogAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         # returning false causes table to not show up in admin page :-(
         # I guess we have to allow changing for now
-        return True
+        if request.user.is_superuser:
+            return True
+        else:
+            return False
 
     def has_delete_permission(self, request, obj=None):
         return False

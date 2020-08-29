@@ -68,7 +68,7 @@ class Profile(models.Model):
     who_are_you = models.CharField(
         max_length=100, choices=user_CHOICES, verbose_name=_("هل أنت ؟"))
     image = models.ImageField(
-        default='default.jpg', upload_to='profile_pics', verbose_name=_("صورة شخصية"))
+        default='profile_pics/default.jpg', upload_to='profile_pics', verbose_name=_("صورة شخصية"))
 
     def __str__(self):
         # return f'{self.user.username, self.user.first_name} Profile'
@@ -216,7 +216,7 @@ class RegisterMediaAct(models.Model):
 
     # ::::::::::::::::: ARTICLES LINKES :::::::::::::::
     if_article_linke = models.CharField(max_length=100, choices=bool_CHOICES,
-                                        verbose_name="هل لديك منشورة باسمك الصريح أو المستعار ؟")
+                                        verbose_name="هل لديك منشور باسمك الصريح أو المستعار ؟")
     articls_link_1 = models.TextField(
         max_length=200, blank=True, null=True, verbose_name="يرجى وضع الروابط اﻹعلامية المنشورة")
 
@@ -317,7 +317,7 @@ class WorkDetail(models.Model):
     )
 
     registration_media_act = models.ForeignKey(
-        RegisterMediaAct, null=False, related_name="registration_media_act", on_delete=models.CASCADE)
+        RegisterMediaAct, null=True, blank=True, related_name="registration_media_act", on_delete=models.CASCADE)
     worker = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.CASCADE)
     org_name = models.CharField(

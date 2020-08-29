@@ -226,9 +226,12 @@ $(document).ready(function () {
         });
 
 
+    });
 
-
-
+    $('.add-multiple').each(function (i) {
+        $(this).find('input[type="file"]').attr("multiple", "true");
+        $(this).find('input[type="file"]').attr("accept", "application/pdf")
+        // $(this).append('<img src="" alt="" class="rounded-circle account-img mr-3" width="50px">');
     });
 
 

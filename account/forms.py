@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
+from upload_validator import FileTypeValidator
 
 
 class LoginForm(forms.Form):
@@ -161,4 +162,19 @@ class ViolationForm(forms.ModelForm):
             'violation_type',
             'date_of_violation',
             'responsibility',
+        ]
+
+
+class UploadForm(forms.ModelForm):
+    doc = forms.FileField(
+        label=_('ملفات مرفقه'), help_text=_("فقط ملفات بصيغة PDF مقبولة"), required=False,
+        validators=[FileTypeValidator(
+            allowed_types=['application/pdf']
+        )]
+    )
+
+    class Meta:
+        model = docs
+        fields = [
+            'doc',
         ]

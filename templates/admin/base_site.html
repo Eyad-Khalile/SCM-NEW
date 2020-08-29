@@ -1,0 +1,32 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+
+<!-- ITS FOR DESABLE THE "USER PERMISSION FROM THE STAFF" -->
+{% block extrastyle %}
+{% if request.user.is_superuser %}
+
+<style>
+    .field-user_permissions {
+        display: block;
+    }
+</style>
+
+{% else %}
+<style>
+    .field-user_permissions {
+        display: none;
+    }
+</style>
+
+{% endif %}
+{% endblock %}
+
+
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
