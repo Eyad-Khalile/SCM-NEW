@@ -45,15 +45,10 @@ class MyUserAdmin(UserAdmin):
         if not user.is_superuser:
             if db_field.name == 'is_superuser':
                 field.widget.attrs = {'disabled': 'disabled'}
-
-                class Media:
-                    js = ('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
-                          '../static/js/permission.js')
-                    css = {
-                        # 'all': (
-                        #     '../static/css/admin.css',
-                        # )
-                    }
+            if db_field.name == 'is_staff':
+                field.widget.attrs = {'disabled': 'disabled'}
+            if db_field.name == 'is_active':
+                field.widget.attrs = {'disabled': 'disabled'}
         return field
 
 

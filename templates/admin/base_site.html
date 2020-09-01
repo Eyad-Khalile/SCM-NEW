@@ -11,11 +11,27 @@
     .field-user_permissions {
         display: block;
     }
+
+    .field-is_active,
+    .form-row.field-is_staff,
+    .form-row.field-is_superuser,
+    .form-row.field-groups,
+    .form-row.field-password {
+        display: block;
+    }
 </style>
 
 {% else %}
 <style>
     .field-user_permissions {
+        display: none;
+    }
+
+    .field-is_active,
+    .form-row.field-is_staff,
+    .form-row.field-is_superuser,
+    .form-row.field-groups,
+    .form-row.field-password {
         display: none;
     }
 </style>
