@@ -107,7 +107,6 @@ class MediaActForm(forms.ModelForm):
             'if_stop_work',
             'date_stop_work',
             'summary_of_your_state',
-            'resource_prof',
             'recmond_1',
             'phon_1',
             'email_1',
@@ -122,7 +121,6 @@ class MediaActForm(forms.ModelForm):
             'type_of_dmande',
             'resaon_for_help',
             'list_of_tools',
-            'last_job_salary',
             'reason_stopping_job',
             'summary_of_help',
             'other_org_demand',
@@ -161,7 +159,9 @@ class ViolationForm(forms.ModelForm):
         fields = [
             'violation_type',
             'date_of_violation',
+            'date_end_violation',
             'responsibility',
+            'vio_description'
         ]
 
 

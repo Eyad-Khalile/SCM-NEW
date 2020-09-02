@@ -216,7 +216,7 @@ class ViolationInline(admin.TabularInline):
 
     fieldsets = [
         ['الانتهاكات', {
-            'fields': [('violation_type', 'date_of_violation', 'responsibility')]
+            'fields': [('violation_type', 'date_of_violation', 'date_end_violation', 'responsibility', 'vio_description')]
         }],
     ]
 
@@ -311,7 +311,7 @@ class RegistrationAdmin(admin.ModelAdmin):
         }],
         ['ملخص يشرح حالتك وروابط من عملك', {
             'classes': ['collapse'],
-            'fields': [('if_article_linke', 'articls_link_1'),  ('resource_prof'), ('recmond_1', 'phon_1', 'email_1'), ('recmond_2', 'phon_2', 'email_2'), ("training_media", "details_traning_media"), ('summary_of_your_state')]
+            'fields': [('if_article_linke', 'articls_link_1'), ('recmond_1', 'phon_1', 'email_1'), ('recmond_2', 'phon_2', 'email_2'), ("training_media", "details_traning_media"), ('summary_of_your_state')]
         }],
         ['الانتهاكات', {
             'classes': ['collapse'],
@@ -324,7 +324,7 @@ class RegistrationAdmin(admin.ModelAdmin):
 
         ['نوع الدعم', {
             'classes': ['collapse'],
-            'fields': [('type_of_dmande'), ('resaon_for_help'), ('list_of_tools'), ('last_job_salary', 'reason_stopping_job'), ('summary_of_help'), ('know_support_programme')]
+            'fields': [('type_of_dmande'), ('resaon_for_help'), ('list_of_tools'), ('reason_stopping_job'), ('summary_of_help'), ('know_support_programme')]
         }],
     ]
     inlines = [

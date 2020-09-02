@@ -283,13 +283,13 @@ def app_media_act(request, user_id):
             instances = expForm.save(commit=False)
             for instance in instances:
                 instance.registration_media_act = reg_user
-                instance.worker_id = request.user.id
+                # instance.worker_id = request.user.id
                 instance.save()
 
             inst_vio = vioForm.save(commit=False)
             for inst in inst_vio:
                 inst.violation = reg_user
-                inst.victim_id = request.user.id
+                # inst.victim_id = request.user.id
                 inst.save()
 
             for field in request.FILES.keys():

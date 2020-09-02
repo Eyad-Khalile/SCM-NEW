@@ -288,31 +288,31 @@ $(document).ready(function () {
         });
 
         // ::::::::::: PROF EXPERIENCE ::::::::::::::::
-        $("div.form-row.field-recmond_1, div.form-row.field-recmond_2").hide();
-        if ($("#id_resource_prof").val() == "1") {
-            $("div.form-row.field-recmond_1, div.form-row.field-recmond_2").show();
-        }
+        // $("div.form-row.field-recmond_1, div.form-row.field-recmond_2").hide();
+        // if ($("#id_resource_prof").val() == "1") {
+        //     $("div.form-row.field-recmond_1, div.form-row.field-recmond_2").show();
+        // }
 
-        $("#id_resource_prof").change(function () {
-            var exp = $("#id_resource_prof").val();
-            switch (exp) {
-                case "":
-                    $(
-                        "div.form-row.field-recmond_1, div.form-row.field-recmond_2"
-                    ).hide();
-                    break;
-                case "0":
-                    $(
-                        "div.form-row.field-recmond_1, div.form-row.field-recmond_2"
-                    ).hide();
-                    break;
-                case "1":
-                    $(
-                        "div.form-row.field-recmond_1, div.form-row.field-recmond_2"
-                    ).show();
-                    break;
-            }
-        });
+        // $("#id_resource_prof").change(function () {
+        //     var exp = $("#id_resource_prof").val();
+        //     switch (exp) {
+        //         case "":
+        //             $(
+        //                 "div.form-row.field-recmond_1, div.form-row.field-recmond_2"
+        //             ).hide();
+        //             break;
+        //         case "0":
+        //             $(
+        //                 "div.form-row.field-recmond_1, div.form-row.field-recmond_2"
+        //             ).hide();
+        //             break;
+        //         case "1":
+        //             $(
+        //                 "div.form-row.field-recmond_1, div.form-row.field-recmond_2"
+        //             ).show();
+        //             break;
+        //     }
+        // });
 
         // :::::::::::::::::: الانتهاكات :::::::::::::::::::
         $("div#violation_set-group").hide();

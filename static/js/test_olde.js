@@ -253,31 +253,31 @@ $(document).ready(function () {
         });
 
         // ::::::::::: PROF EXPERIENCE ::::::::::::::::
-        $("div.form-row.field-recmond_1, div.form-row.field-recmond_2").hide();
-        if ($("#id_resource_prof").val() == "1") {
-            $("div.form-row.field-recmond_1, div.form-row.field-recmond_2").show();
-        }
+        // $("div.form-row.field-recmond_1, div.form-row.field-recmond_2").hide();
+        // if ($("#id_resource_prof").val() == "1") {
+        //     $("div.form-row.field-recmond_1, div.form-row.field-recmond_2").show();
+        // }
 
-        $("#id_resource_prof").change(function () {
-            var exp = $("#id_resource_prof").val();
-            switch (exp) {
-                case "":
-                    $(
-                        "div.form-row.field-recmond_1, div.form-row.field-recmond_2"
-                    ).hide();
-                    break;
-                case "0":
-                    $(
-                        "div.form-row.field-recmond_1, div.form-row.field-recmond_2"
-                    ).hide();
-                    break;
-                case "1":
-                    $(
-                        "div.form-row.field-recmond_1, div.form-row.field-recmond_2"
-                    ).show();
-                    break;
-            }
-        });
+        // $("#id_resource_prof").change(function () {
+        //     var exp = $("#id_resource_prof").val();
+        //     switch (exp) {
+        //         case "":
+        //             $(
+        //                 "div.form-row.field-recmond_1, div.form-row.field-recmond_2"
+        //             ).hide();
+        //             break;
+        //         case "0":
+        //             $(
+        //                 "div.form-row.field-recmond_1, div.form-row.field-recmond_2"
+        //             ).hide();
+        //             break;
+        //         case "1":
+        //             $(
+        //                 "div.form-row.field-recmond_1, div.form-row.field-recmond_2"
+        //             ).show();
+        //             break;
+        //     }
+        // });
 
         // :::::::::::::::::: الانتهاكات :::::::::::::::::::
         $("div#violation_set-group").hide();
@@ -358,7 +358,7 @@ $(document).ready(function () {
 
         // SUPPORT TECHNIQUE
         $('div.form-row.field-list_of_tools').hide();
-        if ($('#id_type_of_dmande').val() == '8' ) {
+        if ($('#id_type_of_dmande').val() == '8') {
             $('div.form-row.field-list_of_tools').show();
         }
 
@@ -586,10 +586,10 @@ $(document).ready(function () {
                         "label[for=id_details_traning_media],#id_details_traning_media"
                     ).hide();
                     break;
-                // default:
-                //     $(
-                //         "label[for=id_details_traning_media],#id_details_traning_media"
-                //     ).hide();
+                    // default:
+                    //     $(
+                    //         "label[for=id_details_traning_media],#id_details_traning_media"
+                    //     ).hide();
             }
         });
     });
@@ -935,7 +935,7 @@ $(document).ready(function () {
             break;
         case "4":
             $("#id_checking-0-educatton_level_1").val("3");
-                break;
+            break;
         default:
             $("#id_checking-0-educatton_level_1").val("0");
     }
