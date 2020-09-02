@@ -1,5 +1,6 @@
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Permission, User, Group
+from copy import deepcopy
 
 
 from django.contrib import admin
@@ -50,6 +51,33 @@ class MyUserAdmin(UserAdmin):
             if db_field.name == 'is_active':
                 field.widget.attrs = {'disabled': 'disabled'}
         return field
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super(UserAdmin, self).get_fieldsets(request, obj)
+        if not obj:
+            return fieldsets
+
+        if not request.user.is_superuser or request.user.pk == obj.pk:
+            fieldsets = deepcopy(fieldsets)
+            for fieldset in fieldsets:
+                # print('Fieldset ==== : ', fieldset)
+
+                if 'password' in fieldset[1]['fields']:
+                    if type(fieldset[1]['fields']) == tuple:
+                        fieldset[1]['fields'] = list(fieldset[1]['fields'])
+                        fieldset[1]['fields'].remove('password')
+
+                if 'is_superuser' in fieldset[1]['fields']:
+                    if type(fieldset[1]['fields']) == tuple:
+                        fieldset[1]['fields'] = list(fieldset[1]['fields'])
+                    fieldset[1]['fields'].remove('is_superuser')
+                    fieldset[1]['fields'].remove('is_active')
+                    fieldset[1]['fields'].remove('is_staff')
+                    fieldset[1]['fields'].remove('groups')
+                    fieldset[1]['fields'].remove('user_permissions')
+                    break
+
+        return fieldsets
 
 
 admin.site.unregister(User)
