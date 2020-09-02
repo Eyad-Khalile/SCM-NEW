@@ -38,19 +38,19 @@ admin.site.site_title = _('إدارة موقع SCM ')
 
 class MyUserAdmin(UserAdmin):
 
-    def formfield_for_dbfield(self, db_field, **kwargs):
+    # def formfield_for_dbfield(self, db_field, **kwargs):
 
-        field = super(MyUserAdmin, self).formfield_for_dbfield(
-            db_field, **kwargs)
-        user = kwargs['request'].user
-        if not user.is_superuser:
-            if db_field.name == 'is_superuser':
-                field.widget.attrs = {'disabled': 'disabled'}
-            if db_field.name == 'is_staff':
-                field.widget.attrs = {'disabled': 'disabled'}
-            if db_field.name == 'is_active':
-                field.widget.attrs = {'disabled': 'disabled'}
-        return field
+    # field = super(MyUserAdmin, self).formfield_for_dbfield(
+    #     db_field, **kwargs)
+    # user = kwargs['request'].user
+    # if not user.is_superuser:
+    #     if db_field.name == 'is_superuser':
+    #         field.widget.attrs = {'disabled': 'disabled'}
+    #     if db_field.name == 'is_staff':
+    #         field.widget.attrs = {'disabled': 'disabled'}
+    #     if db_field.name == 'is_active':
+    #         field.widget.attrs = {'disabled': 'disabled'}
+    # return field
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = super(UserAdmin, self).get_fieldsets(request, obj)
