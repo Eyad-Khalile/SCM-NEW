@@ -70,11 +70,11 @@ class MyUserAdmin(UserAdmin):
                 if 'is_superuser' in fieldset[1]['fields']:
                     if type(fieldset[1]['fields']) == tuple:
                         fieldset[1]['fields'] = list(fieldset[1]['fields'])
-                    fieldset[1]['fields'].remove('is_superuser')
-                    fieldset[1]['fields'].remove('is_active')
-                    fieldset[1]['fields'].remove('is_staff')
-                    fieldset[1]['fields'].remove('groups')
-                    fieldset[1]['fields'].remove('user_permissions')
+                        fieldset[1]['fields'].remove('is_superuser')
+                        fieldset[1]['fields'].remove('is_active')
+                        fieldset[1]['fields'].remove('is_staff')
+                        fieldset[1]['fields'].remove('groups')
+                        fieldset[1]['fields'].remove('user_permissions')
                     break
 
         return fieldsets
