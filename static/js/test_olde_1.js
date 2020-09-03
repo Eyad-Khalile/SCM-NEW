@@ -1044,14 +1044,6 @@ $(document).ready(function () {
     }
 
 
-    if ($('#id_know_support_programme').val() != '') {
-        $('#id_user, #id_profile, #id_medical_state_q, #id_medical_state_des, #id_family_state, #id_have_kids, #id_number_kids, #id_summary_family, #id_education_level, #id_job, #id_experience, #id_if_stop_work, #id_date_stop_work, #id_org_memeber, #id_details, #').attr('disabled', 'disabled');
-    }
-    if ($('#id_know_support_programme').val() != '') {
-        $('.dynamic-registration_media_act').find('input').attr('disabled', 'disabled');
-        $('.dynamic-registration_media_act').find('select').attr('disabled', 'disabled');
-        $('tr:last-child').hide();
-    }
 
 
 
