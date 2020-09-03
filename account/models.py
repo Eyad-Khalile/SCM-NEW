@@ -419,11 +419,7 @@ class Checking(models.Model):
         ('1', _('النتيجة سلبية')),
 
     )
-    zerone_CHOICES = (
-        ('0', '0'),
-        ('1', '1'),
-
-    )
+   
     experinc_CHOICES = (
         ('0', _('أقل من عامين')),
         ('1', _('عامين إلى خمسة')),
@@ -434,6 +430,8 @@ class Checking(models.Model):
         ('0', _('مقبولة')),
         ('1', _('مرفوضة')),
         ('2', _('بحث عن مانحين')),
+        ('3', _('عدم استجابة طالب الدعم لأسئلة التحقق الإضافية ')),
+
 
     )
     registration = models.OneToOneField(
@@ -466,7 +464,7 @@ class Checking(models.Model):
     member_in_journal = models.CharField(
         max_length=30, null=True, blank=True, verbose_name=_("هل هو عضو في مجمع صحفي"))
     hase_violants = models.CharField(
-        max_length=30, null=True, blank=True, default=1, verbose_name=_("تعرّض مُقدّم الطلب لأيّ انتهاكات"))
+        max_length=30, null=True, blank=True,  verbose_name=_("تعرّض مُقدّم الطلب لأيّ انتهاكات"))
     is_related_with_media = models.CharField(
         max_length=255, blank=True, choices=app_CHOICES, null=True, verbose_name=_("هل طلب الدعم مرتبط بالعمل الصحفي"))
     number_of_year_exprince = models.CharField(
@@ -508,7 +506,7 @@ class Checking(models.Model):
         max_length=255, blank=True, null=True, verbose_name=_("شرح لتقيم احترام حقوق الانسان"))
     mark_rspect_right_human = models.CharField(
         max_length=255, blank=True, null=True, default=0, verbose_name=_("تقيم احترام حقوق الانسان"))
-    prof_media = models.CharField(max_length=255, choices=zerone_CHOICES,
+    prof_media = models.CharField(max_length=255, choices=app_CHOICES,
                                   blank=True, null=True, verbose_name=_("المهنية في صياغة الاخبار"))
     # third step
     first_recmond_name = models.CharField(
@@ -532,8 +530,8 @@ class Checking(models.Model):
         max_length=255, choices=result_CHOICES, blank=True, null=True, verbose_name=_("نتيجة التحقق"))
     sumary_of_study = models.TextField(
         max_length=255, blank=True, null=True, verbose_name=_("ملاحظات إضافية تتضمن أية ملاحظات حول الحالة"))
-    # def __str__(self):
-    #     return self.registration
+    def __str__(self):
+        return self.registration.user.username
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
@@ -555,50 +553,27 @@ class CaseFile(models.Model):
     descrpiton = models.CharField(
         max_length=255, null=True, verbose_name=_("وصف الملف المرفق"))
 
-    def __unicode__(self):
-        return self.case
+    def __str__(self):
+        return self.case.user.username
 
     class Meta:
         verbose_name_plural = _('صندوق الوثائق')
 
 
-class SupportOrg(models.Model):
-    support_CHOICES = (
-        ('0', _('مراسلون بلا حدود | RSF')),
-        ('1', _('فري بريس أنليميتيد | FPU')),
-        ('2', _('مؤسسة الإعلام النسوي الدولية | IWMF')),
-        ('3', _('مؤسسة كاليتي | Kality Foundation')),
-        ('4', _('لايف لاين | Lifeline')),
-
-
-
-    )
+class SupportOrgchild(models.Model):
     result_of_org_CHOICES = (
         ('0', _('مقبول')),
         ('1', _('مرفوض')),
-
-
+        ('2', _('قيد الدراسة ')),
     )
-    support = models.OneToOneField(RegisterMediaAct, on_delete=models.CASCADE)
-    date_of_response = models.DateField(
-        verbose_name=_("تاريخ اﻹحالة"), null=True, blank=True)
-    result_of_org = models.CharField(
-        max_length=255, null=True, blank=True, choices=result_of_org_CHOICES, default=False, verbose_name=_("النتيجة"))
-    date_of_result = models.DateField(
-        verbose_name=_("تاريخ اﻹحالة"), blank=True, null=True)
-
-    class Meta:
-        verbose_name_plural = _('الاستجابة')
-
-
-class SupportOrgchild(models.Model):
     support = models.ForeignKey(RegisterMediaAct, on_delete=models.CASCADE)
-    support1 = models.ForeignKey(Support_descrption, null=True, blank=True,
-                                 on_delete=models.CASCADE, verbose_name=_("الجهة الداعمة"))
-    cost = models.DecimalField(max_digits=10, decimal_places=2,
-                               null=True, blank=True, verbose_name=_("التكلفة مقدرة باليورو"))
-
+    date_of_response = models.DateField(_("تاريخ اﻹحالة"), null=True, blank=True)
+    support1 = models.ForeignKey(Support_descrption, null=True, blank=True,on_delete=models.CASCADE, verbose_name=_("الجهة الداعمة"))
+    result_of_org = models.CharField(max_length=255, null=True, blank=True, choices=result_of_org_CHOICES, default=False, verbose_name=_("النتيجة"))
+    cost = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name=_("التكلفة مقدرة باليورو"))
+    date_of_result = models.DateField(verbose_name=_(" تاريخ الاستجابة "), blank=True, null=True)
+    note=models.CharField(max_length=300, null=True, blank=True,  verbose_name=_("ملاحظات"))
     class Meta:
-        verbose_name_plural = _('الجهات الداعمة')
+        verbose_name_plural = _('الاستجابة والجهات الداعمة')
 
 # model to add violation to the registration form or application

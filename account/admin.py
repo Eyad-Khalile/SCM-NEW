@@ -171,14 +171,12 @@ class CaseFileInline(admin.StackedInline):
     model = CaseFile
     extra = 0
     fieldsets = [
-        [' ', {
-
-            'classes': ['upload_files', ],
-            'fields': [('file', 'descrpiton')]
+        ['ملفات مرفقة', {
+            # 'classes': ['work_detail'],
+            'fields': [('descrpiton', 'file', )]
         }],
-
-
     ]
+
 # class to add the docs in jobs subform
 
 
@@ -197,12 +195,12 @@ class SupportInlinechild(admin.StackedInline):
         ['', {
 
             'classes': ['supportchild', ],
-            'fields': [('support1',)]
+            'fields': [('date_of_response','support1','result_of_org',)]
         }],
         ['', {
 
             'classes': ['supportchild_cost', ],
-            'fields': [('cost',)]
+            'fields': [('date_of_result','cost','note',)]
         }],
 
     ]
@@ -235,19 +233,6 @@ class WorkDetailsInline(admin.TabularInline):
     ]
 
 # add the child support form
-
-
-class SupportInline(admin.StackedInline):
-    model = SupportOrg
-
-    fieldsets = [
-        [' بيانات الاستجابة', {
-
-            'classes': ['support'],
-            'fields': [('date_of_response', 'result_of_org', 'date_of_result')]
-        }],
-
-    ]
 
 
 class CheckingInline1(admin.StackedInline):
@@ -328,7 +313,7 @@ class RegistrationAdmin(admin.ModelAdmin):
         }],
     ]
     inlines = [
-        CheckingInline1, SupportInline, SupportInlinechild, CaseFileInline, ViolationInline, DocsInline, WorkDetailsInline
+        CheckingInline1,  SupportInlinechild, CaseFileInline, ViolationInline, DocsInline, WorkDetailsInline
     ]
     # custom for add inlinfrorm after sp field
     change_form_template = 'admin/custom/change_form.html'
@@ -402,7 +387,7 @@ class RegistrationAdmin(admin.ModelAdmin):
     get_email.short_description = 'Email'
 
     list_per_page = 100
-
+    
     class Media:
         js = ('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
               '../static/js/test_olde_1.js', '../static/js/work.js',)
