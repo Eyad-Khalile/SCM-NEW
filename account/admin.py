@@ -1,5 +1,7 @@
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Permission, User, Group
+from copy import deepcopy
 
 
 from django.contrib import admin
@@ -51,9 +53,40 @@ class MyUserAdmin(UserAdmin):
                 field.widget.attrs = {'disabled': 'disabled'}
         return field
 
+    # def get_fieldsets(self, request, obj=None):
+    #     fieldsets = super(UserAdmin, self).get_fieldsets(request, obj)
+    #     if not obj:
+    #         return fieldsets
+
+    #     if not request.user.is_superuser or request.user.pk == obj.pk:
+    #         fieldsets = deepcopy(fieldsets)
+    #         for fieldset in fieldsets:
+    #             # print('Fieldset ==== : ', fieldset)
+
+    #             if 'password' in fieldset[1]['fields']:
+    #                 if type(fieldset[1]['fields']) == tuple:
+    #                     fieldset[1]['fields'] = list(fieldset[1]['fields'])
+    #                     fieldset[1]['fields'].remove('password')
+
+    #             if 'is_superuser' in fieldset[1]['fields']:
+    #                 if type(fieldset[1]['fields']) == tuple:
+    #                     fieldset[1]['fields'] = list(fieldset[1]['fields'])
+    #                     fieldset[1]['fields'].remove('is_superuser')
+    #                     fieldset[1]['fields'].remove('is_active')
+    #                     fieldset[1]['fields'].remove('is_staff')
+    #                     fieldset[1]['fields'].remove('groups')
+    #                     fieldset[1]['fields'].remove('user_permissions')
+    #                 break
+
+    #     return fieldsets
+
 
 admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
+
+# class UserCreateForm(UserCreationForm):
+
+
 # admin.site.unregister(Permission)
 
 
@@ -273,7 +306,7 @@ class CheckingInline1(admin.StackedInline):
 class RegistrationAdmin(admin.ModelAdmin):
 
     list_display = ('user', 'get_email', 'get_First_name', 'get_last_name', 'get_country', 'get_region', 'get_who_are_you', 'job', 'education_level',
-                    'type_of_dmande', 'support_org_state_1', 'created_at', 'state_step',)
+                    'type_of_dmande', 'support_org_state_1', 'created_at', 'state_step', )
     # group fields in sub groups
     fieldsets = [
         ['المعالجة', {
@@ -379,6 +412,8 @@ class RegistrationAdmin(admin.ModelAdmin):
     def get_email(self, obj):
         return obj.user.email
 
+    
+
     get_First_name.short_description = 'الاسم الاول'
     get_last_name.short_description = 'الاسم الاخير'
     get_country.short_description = 'الدولة'
@@ -390,7 +425,7 @@ class RegistrationAdmin(admin.ModelAdmin):
     
     class Media:
         js = ('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
-              '../static/js/test_olde_1.js', '../static/js/work.js',)
+              '../static/js/test_olde_2.js', '../static/js/work.js',)
         css = {
             'all': (
                 '../static/css/admin.css',

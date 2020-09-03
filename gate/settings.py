@@ -154,10 +154,40 @@ MEDIA_URL = '/media/'
 
 
 # ======== Email
-# DEFAULT_FROM_EMAIL = 'will@learndjango.com'
+# DEFAULT_FROM_EMAIL = ''
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'khalile.eyad@gmail.com'
 EMAIL_HOST_PASSWORD = 'Eyad1979@'
+
+
+# YAHOO 
+# EMAIL_HOST = 'smtp.mail.yahoo.fr'
+# EMAIL_PORT = 25
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'eyad.basha79@yahoo.com'
+
+# DEFAULT_FROM_EMAIL = 'email@yahoo.com'
+# DEFAULT_TO_EMAIL = 'email@yahoo.com'
+
+
+# Celery settings
+# //Specify which broker you will use, we are using django's broker for development
+# BROKER_URL = 'django://'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+# CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+# djcelery.setup_loader()
+
+
+
+
+
+
+
+
+

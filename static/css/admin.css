@@ -47,10 +47,10 @@ th {
   width: 12em !important;
 }
 
-.fieldBox.field-recmond_1::before {
+/* .fieldBox.field-recmond_1::before {
   content: ' مصادر تثبت عملك , مصدرين على الاقل :';
   display: block;
   margin-bottom: 1.5rem;
   margin-top: 1.5rem;
   font-size: 1.5em;
-}
+} */

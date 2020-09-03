@@ -47,6 +47,7 @@ def contact(request):
             print('subject ====== ', subject)
             print('from_email ====== ', from_email)
             print('message ====== ', message)
+            
             try:
                 send_mail(subject, message, from_email,
                           ['khalile.eyad@gmail.com'])
@@ -70,7 +71,9 @@ def register(request):
         users = User.objects.all()
         emails = []
         for user in users:
-            emails += user.email,
+            # emails += user.email,
+            emails.append(user.email)
+            print('emails ======== :', emails)
 
         if request.method == 'POST':
             user_form = UserRegistrationForm(request.POST or None)
@@ -90,7 +93,7 @@ def register(request):
                     user_form = UserRegistrationForm()
 
                     current_site = get_current_site(request)
-                    mail_subject = 'Activate your blog account.'
+                    mail_subject = 'Activate your SCM account.'
                     message = render_to_string('registration/acc_active_email.html', {
                         'user': new_user,
                         'domain': current_site.domain,
@@ -259,9 +262,9 @@ DEFAULT_MAX_NUM = 1000
 def app_media_act(request, user_id):
 
     ExFormset = modelformset_factory(
-        WorkDetail, form=ExperForm, extra=11)
+        WorkDetail, form=ExperForm, extra=11, can_delete=True)
     VioFormset = modelformset_factory(
-        Violation, form=ViolationForm, extra=11)
+        Violation, form=ViolationForm, extra=11, can_delete=True)
 
     if request.method == 'POST':
         registerForm = MediaActForm(request.POST or None)
@@ -304,9 +307,18 @@ def app_media_act(request, user_id):
 
             messages.success(request, _('لقد تم تقديم الطلب بنجاح'))
 
+            
+            mail_subject = 'تأكيد استلام طلب'
+            message = 'لقد تم استلام الطلب و ستتم معالجته باقرب وقت ممكن و إعلامكم بالنتجية'
+            to_email = request.user.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+
             return redirect('app_media_act', user_id)
         else:
-            messages.warning(request, _('the forms are not valide :( '))
+            messages.error(request, _('نرحو التحقق من كافة الحقول المطلوبة'))
 
     else:
         registerForm = MediaActForm()
