@@ -39,46 +39,52 @@ admin.site.site_title = _('إدارة موقع SCM ')
 
 class MyUserAdmin(UserAdmin):
 
-    def formfield_for_dbfield(self, db_field, **kwargs):
+    # def formfield_for_dbfield(self, db_field, **kwargs):
 
-        field = super(MyUserAdmin, self).formfield_for_dbfield(
-            db_field, **kwargs)
-        user = kwargs['request'].user
-        if not user.is_superuser:
-            if db_field.name == 'is_superuser':
-                field.widget.attrs = {'disabled': 'disabled'}
-            if db_field.name == 'is_staff':
-                field.widget.attrs = {'disabled': 'disabled'}
-            if db_field.name == 'is_active':
-                field.widget.attrs = {'disabled': 'disabled'}
-        return field
+    #     field = super(MyUserAdmin, self).formfield_for_dbfield(
+    #         db_field, **kwargs)
+    #     # print('Field ======== : ', field)
+    #     user = kwargs['request'].user
 
-    # def get_fieldsets(self, request, obj=None):
-    #     fieldsets = super(UserAdmin, self).get_fieldsets(request, obj)
-    #     if not obj:
-    #         return fieldsets
+    #     if not user.is_superuser:
+    #         # print('db_field ======== : ', db_field)
+    #         print('db_field name ======== : ', db_field.name)
+    #         if db_field.name == 'is_superuser':
+    #             field.widget.attrs = {'disabled': 'disabled'}
+    #         if db_field.name == 'is_staff':
+    #             field.widget.attrs = {'disabled': 'disabled'}
+    #         if db_field.name == 'is_active':
+    #             field.widget.attrs = {'disabled': 'disabled'}
+    #     return field
 
-    #     if not request.user.is_superuser or request.user.pk == obj.pk:
-    #         fieldsets = deepcopy(fieldsets)
-    #         for fieldset in fieldsets:
-    #             # print('Fieldset ==== : ', fieldset)
+    def get_fieldsets(self, request, obj=None):
 
-    #             if 'password' in fieldset[1]['fields']:
-    #                 if type(fieldset[1]['fields']) == tuple:
-    #                     fieldset[1]['fields'] = list(fieldset[1]['fields'])
-    #                     fieldset[1]['fields'].remove('password')
+        fieldsets = super(MyUserAdmin, self).get_fieldsets(request, obj)
+        if not obj:
+            return fieldsets
 
-    #             if 'is_superuser' in fieldset[1]['fields']:
-    #                 if type(fieldset[1]['fields']) == tuple:
-    #                     fieldset[1]['fields'] = list(fieldset[1]['fields'])
-    #                     fieldset[1]['fields'].remove('is_superuser')
-    #                     fieldset[1]['fields'].remove('is_active')
-    #                     fieldset[1]['fields'].remove('is_staff')
-    #                     fieldset[1]['fields'].remove('groups')
-    #                     fieldset[1]['fields'].remove('user_permissions')
-    #                 break
+        # if not request.user.is_superuser or request.user.pk == obj.pk:
+        if not request.user.is_superuser:
+            fieldsets = deepcopy(fieldsets)
+            for fieldset in fieldsets:
+                print('Fieldset ==== : ', fieldset)
 
-    #     return fieldsets
+                if 'password' in fieldset[1]['fields']:
+                    if type(fieldset[1]['fields']) == tuple:
+                        fieldset[1]['fields'] = list(fieldset[1]['fields'])
+                        fieldset[1]['fields'].remove('password')
+
+                if 'is_superuser' in fieldset[1]['fields']:
+                    if type(fieldset[1]['fields']) == tuple:
+                        fieldset[1]['fields'] = list(fieldset[1]['fields'])
+                        fieldset[1]['fields'].remove('is_superuser')
+                        fieldset[1]['fields'].remove('is_active')
+                        fieldset[1]['fields'].remove('is_staff')
+                        fieldset[1]['fields'].remove('groups')
+                        fieldset[1]['fields'].remove('user_permissions')
+                    break
+
+        return fieldsets
 
 
 admin.site.unregister(User)
@@ -126,9 +132,9 @@ class TotalAveragesChangeList(ChangeList):
         self.result_list._result_cache.append(total)
 
 
-pdfmetrics.registerFont(TTFont('Arabic', 'static/fonts/arabtype.ttf'))
-ar = arabic_reshaper.reshape(u' العربية')
-ar = get_display(ar)
+# pdfmetrics.registerFont(TTFont('Arabic', 'static/fonts/arabtype.ttf'))
+# ar = arabic_reshaper.reshape(u' العربية')
+# ar = get_display(ar)
 
 
 def write_pdf_view1(modeladmin, request, queryset):
@@ -228,12 +234,12 @@ class SupportInlinechild(admin.StackedInline):
         ['', {
 
             'classes': ['supportchild', ],
-            'fields': [('date_of_response','support1','result_of_org',)]
+            'fields': [('date_of_response', 'support1', 'result_of_org',)]
         }],
         ['', {
 
             'classes': ['supportchild_cost', ],
-            'fields': [('date_of_result','cost','note',)]
+            'fields': [('date_of_result', 'cost', 'note',)]
         }],
 
     ]
@@ -412,8 +418,6 @@ class RegistrationAdmin(admin.ModelAdmin):
     def get_email(self, obj):
         return obj.user.email
 
-    
-
     get_First_name.short_description = 'الاسم الاول'
     get_last_name.short_description = 'الاسم الاخير'
     get_country.short_description = 'الدولة'
@@ -422,10 +426,10 @@ class RegistrationAdmin(admin.ModelAdmin):
     get_email.short_description = 'Email'
 
     list_per_page = 100
-    
+
     class Media:
         js = ('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
-              '../static/js/test_olde_1.js', '../static/js/work.js',)
+              '../static/js/test_olde_2.js', '../static/js/work.js',)
         css = {
             'all': (
                 '../static/css/admin.css',

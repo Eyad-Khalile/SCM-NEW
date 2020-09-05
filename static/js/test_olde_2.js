@@ -1031,23 +1031,26 @@ $(document).ready(function () {
     }
 
 
-    // if ($('#id_know_support_programme').val() != '') {
-    //     $('#id_user, #id_profile, #id_medical_state_q, #id_medical_state_des, #id_family_state, #id_have_kids, #id_number_kids, #id_summary_family, #id_education_level, #id_job, #id_experience, #id_if_stop_work, #id_date_stop_work, #id_org_memeber, #id_details, #id_if_article_linke, #id_articls_link_1, #id_recmond_1, #id_phon_1, #id_email_1, #id_recmond_2, #id_phon_2, #id_email_2, #id_training_media, #id_details_traning_media, #id_summary_of_your_state, #id_violations, #id_other_org_demand, #id_name_org, #id_date_of_demand_org, #id_result_of_demand_other_org, #id_relation_with_org, #id_summary_of_relations, #id_type_of_dmande, #id_resaon_for_help, #id_reason_stopping_job, #id_summary_of_help, #id_know_support_programme').attr('disabled', 'disabled');
-    // }
-    // if ($('#id_know_support_programme').val() != '') {
-    //     $('.dynamic-registration_media_act').find('input').attr('disabled', 'disabled');
-    //     $('.dynamic-registration_media_act').find('select').attr('disabled', 'disabled');
-    //     $('tr:last-child').hide();
+    if ($('#id_know_support_programme').val() != '') {
+        $('#id_user, #id_profile, #id_medical_state_q, #id_medical_state_des, #id_family_state, #id_have_kids, #id_number_kids, #id_summary_family, #id_education_level, #id_job, #id_experience, #id_if_stop_work, #id_date_stop_work, #id_org_memeber, #id_details, #id_if_article_linke, #id_articls_link_1, #id_recmond_1, #id_phon_1, #id_email_1, #id_recmond_2, #id_phon_2, #id_email_2, #id_training_media, #id_details_traning_media, #id_summary_of_your_state, #id_violations, #id_other_org_demand, #id_name_org, #id_date_of_demand_org, #id_result_of_demand_other_org, #id_relation_with_org, #id_summary_of_relations, #id_type_of_dmande, #id_resaon_for_help, #id_reason_stopping_job, #id_summary_of_help, #id_know_support_programme').attr('disabled', 'disabled');
+    }
+    if ($('#id_know_support_programme').val() != '') {
+        $('.dynamic-registration_media_act').find('input').attr('disabled', 'disabled');
+        $('.dynamic-registration_media_act').find('select').attr('disabled', 'disabled');
+        $('tr:last-child').hide();
 
-    //     $('tr.dynamic-docs_set').find('input').attr('disabled', 'disabled');
-    // }
-    // if ($('#id_know_support_programme').val() != '') {
-    //     $('.dynamic-violation_set').find('input').attr('disabled', 'disabled');
-    //     $('.dynamic-violation_set').find('select').attr('disabled', 'disabled');
-    //     $('.dynamic-violation_set').find('textarea').attr('disabled', 'disabled');
-
-       
-    // }
+        $('tr.dynamic-docs_set').find('input').attr('disabled', 'disabled');
+    }
+    if ($('#id_know_support_programme').val() != '') {
+        $('.dynamic-violation_set').find('input').attr('disabled', 'disabled');
+        $('.dynamic-violation_set').find('select').attr('disabled', 'disabled');
+        $('.dynamic-violation_set').find('textarea').attr('disabled', 'disabled');
+    }
+    $('form').submit(function (e) {
+        $(':disabled').each(function (e) {
+            $(this).removeAttr('disabled');
+        })
+    });
 
 
 
