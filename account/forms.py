@@ -165,16 +165,16 @@ class ViolationForm(forms.ModelForm):
         ]
 
 
-# class UploadForm(forms.ModelForm):
-#     doc = forms.FileField(
-#         label=_('ملفات مرفقه'), help_text=_("فقط ملفات بصيغة PDF مقبولة"), required=False,
-#         validators=[FileTypeValidator(
-#             allowed_types=['application/pdf']
-#         )]
-#     )
+class UploadForm(forms.ModelForm):
+    doc = forms.FileField(
+        label=_('ملفات مرفقه'), help_text=_("فقط ملفات بصيغة PDF مقبولة"), required=False,
+        # validators=[FileTypeValidator(
+        #     allowed_types=['application/pdf']
+        # )]
+    )
 
-#     class Meta:
-#         model = docs
-#         fields = [
-#             'doc',
-#         ]
+    class Meta:
+        model = docs
+        fields = [
+            'doc',
+        ]

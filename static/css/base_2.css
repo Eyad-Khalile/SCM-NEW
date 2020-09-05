@@ -736,6 +736,10 @@ footer a:hover {
     display: block;
 }
 
+.form-group {
+    /* margin-bottom: 1rem; */
+    overflow: hidden;
+}
 
 /* ========= Les Animations ========= */
 
