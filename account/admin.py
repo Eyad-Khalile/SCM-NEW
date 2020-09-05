@@ -429,7 +429,7 @@ class RegistrationAdmin(admin.ModelAdmin):
 
     class Media:
         js = ('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
-              '../static/js/test_olde_2.js', '../static/js/work.js',)
+              '../static/js/test_olde_2.js', '../static/js/work_2.js',)
         css = {
             'all': (
                 '../static/css/admin.css',
