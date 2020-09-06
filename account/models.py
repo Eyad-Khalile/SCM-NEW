@@ -63,7 +63,7 @@ class Profile(models.Model):
         max_length=100, choices=city_CHOICES, null=True, blank=True, verbose_name=_('في أي محافظة ؟'))
 
     current_area = models.CharField(
-        max_length=255, null=True, blank=True, verbose_name=_('من اي منطقة ؟'))
+        max_length=255, null=True, blank=True, verbose_name=_('في اي منطقة ؟'))
 
     who_are_you = models.CharField(
         max_length=100, choices=user_CHOICES, verbose_name=_("هل أنت ؟"))
@@ -419,7 +419,7 @@ class Checking(models.Model):
         ('1', _('النتيجة سلبية')),
 
     )
-   
+
     experinc_CHOICES = (
         ('0', _('أقل من عامين')),
         ('1', _('عامين إلى خمسة')),
@@ -530,6 +530,7 @@ class Checking(models.Model):
         max_length=255, choices=result_CHOICES, blank=True, null=True, verbose_name=_("نتيجة التحقق"))
     sumary_of_study = models.TextField(
         max_length=255, blank=True, null=True, verbose_name=_("ملاحظات إضافية تتضمن أية ملاحظات حول الحالة"))
+
     def __str__(self):
         return self.registration.user.username
 
@@ -567,12 +568,19 @@ class SupportOrgchild(models.Model):
         ('2', _('قيد الدراسة ')),
     )
     support = models.ForeignKey(RegisterMediaAct, on_delete=models.CASCADE)
-    date_of_response = models.DateField(_("تاريخ اﻹحالة"), null=True, blank=True)
-    support1 = models.ForeignKey(Support_descrption, null=True, blank=True,on_delete=models.CASCADE, verbose_name=_("الجهة الداعمة"))
-    result_of_org = models.CharField(max_length=255, null=True, blank=True, choices=result_of_org_CHOICES, default=False, verbose_name=_("النتيجة"))
-    cost = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name=_("التكلفة مقدرة باليورو"))
-    date_of_result = models.DateField(verbose_name=_(" تاريخ الاستجابة "), blank=True, null=True)
-    note=models.CharField(max_length=300, null=True, blank=True,  verbose_name=_("ملاحظات"))
+    date_of_response = models.DateField(
+        _("تاريخ اﻹحالة"), null=True, blank=True)
+    support1 = models.ForeignKey(Support_descrption, null=True, blank=True,
+                                 on_delete=models.CASCADE, verbose_name=_("الجهة الداعمة"))
+    result_of_org = models.CharField(max_length=255, null=True, blank=True,
+                                     choices=result_of_org_CHOICES, default=False, verbose_name=_("النتيجة"))
+    cost = models.DecimalField(max_digits=10, decimal_places=2,
+                               null=True, blank=True, verbose_name=_("التكلفة مقدرة باليورو"))
+    date_of_result = models.DateField(verbose_name=_(
+        " تاريخ الاستجابة "), blank=True, null=True)
+    note = models.CharField(max_length=300, null=True,
+                            blank=True,  verbose_name=_("ملاحظات"))
+
     class Meta:
         verbose_name_plural = _('الاستجابة والجهات الداعمة')
 
