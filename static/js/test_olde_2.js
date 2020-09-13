@@ -905,6 +905,8 @@ $(document).ready(function () {
     $('#id_checking-0-tiitle_of_state').val(
         $('#id_profile option:selected').text()
     );
+    /////// get the user id value without reload the page
+    $('#id_user').select2();
 
 
 
@@ -927,42 +929,58 @@ $(document).ready(function () {
     var medical_state = $("#id_medical_state_q").val();
     var paid1_job = $("#id_experience").val();
     var violation_q = $("#id_violations").val();
-
+//id_checking-0-hase_violants,
     var a = parseInt($("#id_checking-0-member_in_journal").val());
     var b = parseInt($("#id_checking-0-educatton_level_1").val());
     var c = parseInt($("#id_checking-0-medical_state").val());
     var d = parseInt($("#id_checking-0-note_paid_job").val());
-    var f = parseInt($("#id_checking-0-mark_rspect_right_human").val());
-    var t = parseInt($("#id_checking-0-mark_rspect_coppyright").val());
-    var g = parseInt($("#id_checking-0-rspect_legal_coppyright").val());
-    var h = parseInt($("#id_checking-0-note_of_year_experince").val());
+    var e = parseInt($("#id_checking-0-note_of_year_experince").val());
+    var f = parseInt($("#id_checking-0-hase_violants").val());
 
-    $("#id_checking-0-total_of_note").val(a + b + c + d + h + f + t);
+//2stage,
+    var g= parseInt($("#id_checking-0-mark_rspect_right_human").val());
+    var h = parseInt($("#id_checking-0-mark_rspect_coppyright").val());
+    var k = parseInt($("#id_checking-0-rspect_legal_coppyright").val());
+   
+    $("#id_checking-0-total_of_note").val(a +c+b +d+e+f+g+h+k );
 
     //give the type of the demande note
     switch (demand) {
-        case "0":
-            $("#id_checking-0-confirm_stat").val("دعم معيش");
-            break;
         case "1":
-            $("#id_checking-0-confirm_stat").val("إيجاد فرصة عمل");
+            $("#id_checking-0-confirm_stat").val('مناصرة');
             break;
         case "2":
-            $("#id_checking-0-confirm_stat").val("خروج آمن");
+            $("#id_checking-0-confirm_stat").val("إيجاد فرصة عمل");
             break;
         case "3":
-            $("#id_checking-0-confirm_stat").val(
-                "خروج دعم ملف اللجوء - تأشيرات خروج"
-            );
+            $("#id_checking-0-confirm_stat").val('دعم قانوني');
             break;
         case "4":
-            $("#id_checking-0-confirm_stat").val("دعم تقني وبطاقات صحفية");
+            $("#id_checking-0-confirm_stat").val('دعم طبي');
             break;
         case "5":
-            $("#id_checking-0-confirm_stat").val("دعم طبي");
+            $("#id_checking-0-confirm_stat").val('دعم ملف اللجوء - تأشيرات خروج');
             break;
         case "6":
-            $("#id_checking-0-confirm_stat").val("غير ذلك");
+            $("#id_checking-0-confirm_stat").val('دعم الانتقال اﻵمن');
+            break;
+        case "7":
+            $("#id_checking-0-confirm_stat").val('الدعم المعيشي');
+            break;
+        case "8":
+                $("#id_checking-0-confirm_stat").val('الدعم التقني');
+                break;
+        case "9":
+                $("#id_checking-0-confirm_stat").val('دعم بطاقات صحفية');
+                break;
+        case "10":
+                $("#id_checking-0-confirm_stat").val('رسائل توصية');
+                 break;
+        case "11":
+                 $("#id_checking-0-confirm_stat").val('خروج آمن');
+                 break;
+        case "12":
+             $("#id_checking-0-confirm_stat").val('غير ذلك');
             break;
         default:
             $("#id_checking-0-confirm_stat").val("0");
@@ -1029,8 +1047,9 @@ $(document).ready(function () {
         default:
             $("#id_checking-0-hase_violants").val("0");
     }
-
-
+    
+//make all the selected fields readonly after first save 
+//////////////////////////////////////////////////////////////////////////
     if ($('#id_know_support_programme').val() != '') {
         $('#id_user, #id_profile, #id_medical_state_q, #id_medical_state_des, #id_family_state, #id_have_kids, #id_number_kids, #id_summary_family, #id_education_level, #id_job, #id_experience, #id_if_stop_work, #id_date_stop_work, #id_org_memeber, #id_details, #id_if_article_linke, #id_articls_link_1, #id_recmond_1, #id_phon_1, #id_email_1, #id_recmond_2, #id_phon_2, #id_email_2, #id_training_media, #id_details_traning_media, #id_summary_of_your_state, #id_violations, #id_other_org_demand, #id_name_org, #id_date_of_demand_org, #id_result_of_demand_other_org, #id_relation_with_org, #id_summary_of_relations, #id_type_of_dmande, #id_resaon_for_help, #id_reason_stopping_job, #id_summary_of_help, #id_know_support_programme').attr('disabled', 'disabled');
     }
@@ -1051,7 +1070,7 @@ $(document).ready(function () {
             $(this).removeAttr('disabled');
         })
     });
-
+ /////////////////////////////////////////////////////////////////////////////////////////////////:
 
 
 });

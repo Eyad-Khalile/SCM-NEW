@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-
 from django_countries.fields import CountryField
 from django.utils import timezone
 
@@ -196,7 +195,7 @@ class RegisterMediaAct(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profile = models.ForeignKey(
         Profile, default=None, on_delete=models.CASCADE)
-
+ 
     # :::::::::::: FAMILY STATE :::::::::::
     family_state = models.CharField(
         max_length=30, choices=family_CHOICES, verbose_name=_('الوضع العائلي'))
@@ -362,7 +361,8 @@ class Violation(models.Model):
         ('6', _('اصابة')),
         ('7', _('تهديد')),
         ('8', _('ابتزاز')),
-        ('9', _('غير ذلك')),
+        ('9', _('التهجير القسري')),
+        ('10', _('غير ذلك')),
     )
 
     responsibility_CHOICES = (
@@ -389,7 +389,8 @@ class Violation(models.Model):
 
     class Meta:
         verbose_name_plural = _('الانتهاكات')
-
+    def __str__(self):
+        return self.violation_type
 # :::::::::::::::::: DOCS :::::::::::::::::::::::
 
 
@@ -435,7 +436,7 @@ class Checking(models.Model):
 
     )
     registration = models.OneToOneField(
-        RegisterMediaAct, on_delete=models.CASCADE)
+        RegisterMediaAct,related_name="registration", on_delete=models.CASCADE)
     date_of_updat = models.DateField(
         editable=False, null=True, blank=True, auto_now=True, verbose_name=_("تاريخ اخر تحديث"))
     tiitle_of_state = models.CharField(
@@ -487,7 +488,7 @@ class Checking(models.Model):
     type_heate_speech = models.CharField(max_length=255, choices=app_CHOICES, blank=True, null=True,
                                          verbose_name=_("هل هو خطاب تميّزي على أساس العرق أو الدين أو أو النوع الجندري أو الطائفة أو القوميّة؟"))
     note_type_heate_speech = models.CharField(
-        max_length=255, blank=True, null=True, verbose_name=_("هل هو خطاب تميّزي على أساس العرق أو الدين أو أو النوع الجندري أو الطائفة أو القوميّة؟"))
+        max_length=255, blank=True, null=True, verbose_name=_("شرح الخطاب التمييزي"))
     rspect_legal_coppyright = models.CharField(
         max_length=255, choices=app_CHOICES, blank=True, null=True, verbose_name=_("-هل يُراعي الحق في الخصوصيّة والصور؟"))
     note_rspect_legal_coppyright = models.CharField(
@@ -556,32 +557,45 @@ class CaseFile(models.Model):
 
     def __str__(self):
         return self.case.user.username
-
     class Meta:
         verbose_name_plural = _('صندوق الوثائق')
-
-
+class app_from_org(models.Model):
+       first_name = models.CharField(
+        max_length=150, null=True, blank=True, verbose_name=_('لاسم '))
+       email = models.EmailField(
+        max_length=255,  blank=True, null=True, verbose_name=_("الايميل" ))
+       date_of_response = models.DateField( _("تاريخ اﻹحالة"), null=True, blank=True)
+       support1 = models.ForeignKey(Support_descrption, null=True, blank=True,
+                                 on_delete=models.CASCADE, verbose_name=_("الجهة المحولة")) 
+       state_summary = models.TextField(
+        max_length=1500, blank=True, null=True, verbose_name=_("شرح معلومات وفق الجهة المحولة"))
+       scm_summary = models.TextField(
+        max_length=1500, blank=True, null=True, verbose_name=_("شرح معلومات وفق الجهة المحولة"))
+        
+       def __str__(self):
+            return self.first_name
+       class Meta:
+            verbose_name_plural = _('طلبات التحقق من الجهات الخارجية')
 class SupportOrgchild(models.Model):
     result_of_org_CHOICES = (
         ('0', _('مقبول')),
         ('1', _('مرفوض')),
         ('2', _('قيد الدراسة ')),
     )
-    support = models.ForeignKey(RegisterMediaAct, on_delete=models.CASCADE)
+    supportOrgchild = models.ForeignKey(RegisterMediaAct, related_name="supportOrgchild", on_delete=models.CASCADE)
     date_of_response = models.DateField(
         _("تاريخ اﻹحالة"), null=True, blank=True)
+    #supoo = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     support1 = models.ForeignKey(Support_descrption, null=True, blank=True,
                                  on_delete=models.CASCADE, verbose_name=_("الجهة الداعمة"))
     result_of_org = models.CharField(max_length=255, null=True, blank=True,
-                                     choices=result_of_org_CHOICES, default=False, verbose_name=_("النتيجة"))
+                                     choices=result_of_org_CHOICES, default=False, verbose_name=_("التنيجة من الجهة المانحة"))
     cost = models.DecimalField(max_digits=10, decimal_places=2,
                                null=True, blank=True, verbose_name=_("التكلفة مقدرة باليورو"))
     date_of_result = models.DateField(verbose_name=_(
         " تاريخ الاستجابة "), blank=True, null=True)
     note = models.CharField(max_length=300, null=True,
                             blank=True,  verbose_name=_("ملاحظات"))
-
     class Meta:
         verbose_name_plural = _('الاستجابة والجهات الداعمة')
-
-# model to add violation to the registration form or application
+   

@@ -2,11 +2,9 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Permission, User, Group
 from copy import deepcopy
-
-
 from django.contrib import admin
 from .models import *
-
+from account.actions  import export_as_xls
 from django.contrib.admin.views.main import ChangeList
 from django.db.models import Sum, Avg
 from django.http import HttpResponse
@@ -25,7 +23,6 @@ import codecs
 from django_admin_listfilter_dropdown.filters import DropdownFilter, ChoiceDropdownFilter, RelatedDropdownFilter
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 from django.utils.translation import ugettext_lazy as _
-
 
 # ::::::::::::: CONF ADMIN PAGE TITLE ::::::::::::::
 admin.site.site_header = _('إدارة موقع SCM ')
@@ -176,33 +173,28 @@ def write_pdf_view1(modeladmin, request, queryset):
     return response
 
 
-def export_books(modeladmin, request, queryset):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="books.csv"'
-    response.write(codecs.BOM_UTF8)
-    writer = csv.writer(response)
-    writer.writerow(['gender', 'last_name', 'first_name', 'nick_name', 'birth_date', 'birth_place', 'country', 'city', 'medical_state_q', 'medical_note_inf',
-                     'educatton_level', 'job', 'start_date', 'document_1', 'document_2', 'org_memeber', 'details', 'paid_job', 'name_of_company_paid',
-                     'educatton_level', 'job', 'start_date', 'document_1', 'document_2', 'org_memeber', 'details', 'paid_job', 'name_of_company_paid',
-                     'family_state', 'have_kids', 'number_kids', 'summary_of_recsituation',
-                     'type_of_dmande', 'resaon_for_help', 'list_of_tools', 'last_job_salary', 'reason_stopping_job',
-                     'violations', 'kind_of_violation', 'date_of_violations', 'relation_with_org', 'summary_of_relations',
-                     'other_org_demand', 'name_org', 'date_of_demand_org', 'tyoe_of_demand_other_org', 'result_of_demand_other_org',
-                     'recmond_1', 'phon_1', 'email_1', 'recmond_2', 'phon_2', 'email_2', ])
-    books = queryset.values_list('gender', 'last_name', 'first_name', 'nick_name', 'birth_date', 'birth_place', 'country', 'city', 'medical_state_q', 'medical_note_inf',
-                                 'educatton_level', 'job', 'start_date', 'document_1', 'document_2', 'org_memeber', 'details', 'paid_job', 'name_of_company_paid',
-                                 'educatton_level', 'job', 'start_date', 'document_1', 'document_2', 'org_memeber', 'details', 'paid_job', 'name_of_company_paid',
-                                 'family_state', 'have_kids', 'number_kids', 'summary_of_recsituation',
-                                 'type_of_dmande', 'resaon_for_help', 'list_of_tools', 'last_job_salary', 'reason_stopping_job',
-                                 'violations', 'kind_of_violation', 'date_of_violations', 'relation_with_org', 'summary_of_relations',
-                                 'other_org_demand', 'name_org', 'date_of_demand_org', 'tyoe_of_demand_other_org', 'result_of_demand_other_org',
-                                 'recmond_1', 'phon_1', 'email_1', 'recmond_2', 'phon_2', 'email_2')
-    for book in books:
-        writer.writerow(book)
-    return response
+# def export_books(modeladmin, request, queryset):
+#     response = HttpResponse(content_type='text/csv')
+#     response['Content-Disposition'] = 'attachment; filename="books.csv"'
+#     response.write(codecs.BOM_UTF8)
+#     writer = csv.writer(response)
+#     fields=RegisterMediaAct._meta.fields
+#     l=[]
+#     l_1=['id', 'user', 'profile', 'family_state', 'have_kids', 'number_kids', 'summary_family', 'medical_state_q', 'medical_state_des', 'education_level', 'job', 'experience', 'if_article_linke', 'articls_link_1', 'if_stop_work', 'date_stop_work', 'summary_of_your_state', 'recmond_1', 'phon_1', 'email_1', 'recmond_2', 'phon_2', 'email_2', 'org_memeber', 'details', 'violations', 'relation_with_org', 'summary_of_relations', 'type_of_dmande', 'resaon_for_help', 'list_of_tools', 'reason_stopping_job', 'summary_of_help', 'other_org_demand', 'name_org', 'date_of_demand_org', 'type_of_demand_other_org', 'result_of_demand_other_org', 'know_support_programme', 'training_media', 'details_traning_media', 'state_step', 'support_org_state_1', 'created_at']
+#     for field in fields:
+#       l.append(field.verbose_name)        
+#     writer.writerow(l)
+#     instances = RegisterMediaAct.objects.all().only( 'id', 'user', 'profile', 'family_state', 'have_kids', 'number_kids', 'summary_family', 'medical_state_q', 'medical_state_des', 'education_level', 'job', 'experience', 'if_article_linke', 'articls_link_1', 'if_stop_work', 'date_stop_work', 'summary_of_your_state', 'recmond_1', 'phon_1', 'email_1', 'recmond_2', 'phon_2', 'email_2', 'org_memeber', 'details', 'violations', 'relation_with_org', 'summary_of_relations', 'type_of_dmande', 'resaon_for_help', 'list_of_tools', 'reason_stopping_job', 'summary_of_help', 'other_org_demand', 'name_org', 'date_of_demand_org', 'type_of_demand_other_org', 'result_of_demand_other_org', 'know_support_programme', 'training_media', 'details_traning_media', 'state_step', 'support_org_state_1', 'created_at')
+#     books=[]
+#     for f in l_1:
+#         ins='instances[0].get_'
+#         disp='_display()'
+#         ins+f+disp
+#     writer.writerow(books)
+#     return response
 
 
-export_books.short_description = 'Export to csv'
+# export_books.short_description = 'Export to csv'
 # add the attacement files case in admin page as inline fields
 
 
@@ -311,8 +303,9 @@ class CheckingInline1(admin.StackedInline):
 
 class RegistrationAdmin(admin.ModelAdmin):
 
-    list_display = ('user', 'get_email', 'get_First_name', 'get_last_name', 'get_country', 'get_region', 'get_who_are_you', 'job', 'education_level',
-                    'type_of_dmande', 'support_org_state_1', 'created_at', 'state_step', )
+    list_display = ('user', 'get_email', 'get_First_name', 'get_last_name', 'get_country', 'get_region', 'get_who_are_you', 'job', 'get_eduction_level',
+                    'type_of_dmande', 'support_org_state_1', 'created_at', 'state_step','get_violation','get_result_SCM','get_result_org', 'get_support_name_orgs',
+                    'get_date_respond',)
     # group fields in sub groups
     fieldsets = [
         ['المعالجة', {
@@ -362,20 +355,17 @@ class RegistrationAdmin(admin.ModelAdmin):
                    ('education_level', ChoiceDropdownFilter), ('job',
                                                                ChoiceDropdownFilter),
                    ('created_at', DateRangeFilter),
-                   ('profile__country', ChoiceDropdownFilter), ('profile__region',
-                                                                ChoiceDropdownFilter),
                    ('profile__current_country', ChoiceDropdownFilter), (
                        'profile__current_region', ChoiceDropdownFilter),
-                   ('profile__who_are_you', ChoiceDropdownFilter), (
-                       'violation__violation_type', ChoiceDropdownFilter),
-                   ('violations', ChoiceDropdownFilter), ('relation_with_org',
-                                                          ChoiceDropdownFilter),
-                   ('medical_state_q', ChoiceDropdownFilter), ('profile__gender',
-                                                               ChoiceDropdownFilter),
-                   ('org_memeber', ChoiceDropdownFilter))
+                   ( 'violation__violation_type', ChoiceDropdownFilter), ('registration__result_of_verfication', ChoiceDropdownFilter),
+                    ('supportOrgchild__result_of_org', ChoiceDropdownFilter),('supportOrgchild__support1'),
+                   ('violations', ChoiceDropdownFilter), ('relation_with_org',ChoiceDropdownFilter),('supportOrgchild__date_of_response', DateRangeFilter),
+                   ('medical_state_q', ChoiceDropdownFilter), ('profile__gender', ChoiceDropdownFilter),
+                   ('org_memeber', ChoiceDropdownFilter),)
     search_fields = ('job', 'user__first_name',
                      'user__last_name', 'user__email', 'profile__phone')
-    actions = [write_pdf_view1, export_books, ]
+    #raw_id_fields = ('user',)
+    actions = [write_pdf_view1,export_as_xls,  ]
     # def has_change_permission(self, request, obj=None):
     #       return False
     # function to get the user name after any action
@@ -399,34 +389,43 @@ class RegistrationAdmin(admin.ModelAdmin):
     #           return []
     def get_First_name(self, obj):
         return obj.user.first_name
-
     def get_last_name(self, obj):
         return obj.user.last_name
-
     def get_country(self, obj):
         return obj.profile.current_country
-
     def get_region(self, obj):
         return obj.profile.current_region
-
     def get_who_are_you(self, obj):
         return obj.profile.get_who_are_you_display()
-
-    def get_violation(self, obj):
-        return obj.violation.get_violation_type_display()
-
+    def get_violation(self,obj):
+        return ",".join([k.get_violation_type_display() for k in obj.violation_set.all()])
+    def get_result_SCM(self,obj):
+            return obj.registration.get_result_of_verfication_display()
+    def get_result_org(self,obj):
+        return  ",".join([t.get_result_of_org_display() for t in obj.supportOrgchild.all()])
     def get_email(self, obj):
         return obj.user.email
+    def get_support_name_orgs(self,obj):
+        return ",".join([str(k.support1) for k in obj.supportOrgchild.all()])
+    def get_eduction_level(self, obj):
+            return obj.get_education_level_display()
+    def get_date_respond(self,obj):
+                return ",".join([str(k.date_of_response) for k in obj.supportOrgchild.all()])
 
+    get_violation.short_description='الانتهاكات'
     get_First_name.short_description = 'الاسم الاول'
     get_last_name.short_description = 'الاسم الاخير'
     get_country.short_description = 'الدولة'
     get_region.short_description = 'المحافظة'
     get_who_are_you.short_description = 'هل أنت'
     get_email.short_description = 'Email'
-
+    get_result_SCM.short_description='التيجة'
+    get_result_org.short_description='النتيجة من قبل الجهات الداعمة'
+    get_support_name_orgs.short_description='الجهات الداعمة'
+    get_eduction_level.short_description='المستوى التعليمي'
+    get_date_respond.short_description='تاريخ الاحالة'
     list_per_page = 100
-
+   
     class Media:
         js = ('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
               '../static/js/test_olde_2.js', '../static/js/work_2.js',)
@@ -505,16 +504,26 @@ class CaseFileadmin(admin.ModelAdmin):
 
 class orgchildeadmin(admin.ModelAdmin):
     """Create an admin view of the cost and support """
-    list_display = ('support', 'support1', 'cost')
-    search_fields = ['support__Application_number', 'support1', 'cost']
+    list_display = ('supportOrgchild','get_email','get_F','get_last_name','support1', 'cost')
+    search_fields = ['support1', 'cost']
     list_filter = ['support1', ]
-    show_change_link = True
-    # sum function in list display
-
+    #sum function in list display
     def get_changelist(self, request, **kwargs):
         return TotalAveragesChangeList
+    def get_F(self, obj):
+        return obj.supportOrgchild.user.first_name
+    def get_last_name(self, obj):
+        return obj.supportOrgchild.user.last_name
+    def get_email(self, obj):
+        return obj.supportOrgchild.user.email
+    get_F.short_description = _('الاسم اﻷول')
+    get_last_name.short_description = _('الاسم اﻷخير')
+    get_email.short_description = _('البريد الالكتروني')
 
-
+class  app_from_org_admin(admin.ModelAdmin):
+    list_display = ('first_name','email','date_of_response','support1','state_summary','scm_summary')
+    search_fields = ['first_name', 'email']
+    list_filter = ['support1',('date_of_response', DateRangeFilter) ]
 class org_description_admin(admin.ModelAdmin):
     """Create an admin view of the cost and support """
     list_display = ('suppo', 'suppo_description')
@@ -531,9 +540,11 @@ class Violation_admin(admin.ModelAdmin):
 
 admin.site.register(Checking, CheckingAdmin)
 admin.site.register(RegisterMediaAct, RegistrationAdmin)
-# admin.site.register(LogEntry, LogAdmin)
+#admin.site.register(LogEntry, LogAdmin)
 admin.site.register(CaseFile, CaseFileadmin)
 admin.site.register(SupportOrgchild, orgchildeadmin)
 admin.site.register(Support_descrption, org_description_admin)
 admin.site.register(Violation, Violation_admin)
 admin.site.register(Profile)
+admin.site.register(app_from_org,app_from_org_admin)
+
