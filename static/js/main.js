@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    $('body').css('padding-top', $('.navbar').outerHeight() + 'px')
     $('#div_id_image').addClass('row d-block');
     $('#id_birth_date').attr('type', 'date');
     $('#id_date_stop_work').attr('type', 'date');

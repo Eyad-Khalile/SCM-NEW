@@ -741,6 +741,99 @@ footer a:hover {
     overflow: hidden;
 }
 
+
+
+
+/* :::::::::::::: F A Q :::::::::::: */
+
+.h_faq {
+    font-weight: 900;
+    font-size: 3rem !important;
+    padding-top: 1em;
+    margin-top: 1em;
+}
+
+.group_1,
+.group_2 {
+    border: 1px solid #1B4B7B;
+    border-radius: 20px;
+    padding: 1em;
+    margin: 2em auto;
+    background-color: #fff;
+}
+
+.block {
+    /* background-color: #00cffa; */
+    border-radius: 20px;
+    padding: 2em;
+    margin: 1em auto;
+    box-shadow: 1px 1px 10px #1B4B7B;
+}
+
+.block h4 {
+    font-weight: 600;
+}
+
+.block h3 {
+    margin-bottom: 1em;
+}
+
+
+
+.group_2 h2,
+h3 {
+    font-weight: bold;
+}
+
+.group_1 h2,
+h3 {
+    font-weight: bold;
+}
+
+.block p {
+    font-size: 1.25rem;
+}
+
+.block ol li {
+    font-size: 1.25rem;
+}
+
+.group_3 {
+    border: 4mm ridge rgb(27, 75, 123);
+    border-radius: 20px;
+    padding: 1em;
+    margin: 2em auto;
+    background-color: #fff;
+}
+
+.mess h2 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    padding-bottom: 1em;
+    border-bottom: 2px dashed rgb(27, 75, 123);
+    ;
+}
+
+.mess p {
+    font-size: 2rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ========= Les Animations ========= */
 
 @-webkit-keyframes change_color {
