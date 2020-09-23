@@ -435,12 +435,20 @@ class Checking(models.Model):
 
 
     )
+    close_or_open = (
+        ('0', _('مفتوح ')),
+        ('1', _('مغلق')),
+        
+    )
+
     registration = models.OneToOneField(
         RegisterMediaAct,related_name="registration", on_delete=models.CASCADE)
     date_of_updat = models.DateField(
         editable=False, null=True, blank=True, auto_now=True, verbose_name=_("تاريخ اخر تحديث"))
     tiitle_of_state = models.CharField(
         max_length=255, blank=True, null=True, verbose_name=_("عنوان الحالة"))
+    colse_or_open=models.CharField(
+        max_length=255, blank=True,choices=close_or_open, null=True,default='مفتوح ', verbose_name=_("متابعة الحالة"))
     urg_mark = models.CharField(
         max_length=255, blank=True, null=True, verbose_name=_("درجة الطوارئ"))
     confirm_stat = models.CharField(
@@ -559,9 +567,10 @@ class CaseFile(models.Model):
         return self.case.user.username
     class Meta:
         verbose_name_plural = _('صندوق الوثائق')
+
 class app_from_org(models.Model):
        first_name = models.CharField(
-        max_length=150, null=True, blank=True, verbose_name=_('لاسم '))
+        max_length=150, null=True, blank=True, verbose_name=_('الاسم '))
        email = models.EmailField(
         max_length=255,  blank=True, null=True, verbose_name=_("الايميل" ))
        date_of_response = models.DateField( _("تاريخ اﻹحالة"), null=True, blank=True)
@@ -571,11 +580,22 @@ class app_from_org(models.Model):
         max_length=1500, blank=True, null=True, verbose_name=_("شرح معلومات وفق الجهة المحولة"))
        scm_summary = models.TextField(
         max_length=1500, blank=True, null=True, verbose_name=_("شرح معلومات وفق الجهة المحولة"))
-        
        def __str__(self):
             return self.first_name
        class Meta:
             verbose_name_plural = _('طلبات التحقق من الجهات الخارجية')
+class CaseFile_org(models.Model):
+    # When a Case is deleted, upload models are also deleted
+    case_org = models.ForeignKey(app_from_org,related_name='case_org', on_delete=models.CASCADE)
+    file = models.FileField(upload_to='documents/', null=True, blank=True)
+    descrpiton = models.CharField(
+        max_length=255, null=True, verbose_name=_("وصف الملف المرفق"))
+
+    def __str__(self):
+        return self.case_org.first_name
+    class Meta:
+        verbose_name_plural = _('صندوق الوثائق')
+
 class SupportOrgchild(models.Model):
     result_of_org_CHOICES = (
         ('0', _('مقبول')),

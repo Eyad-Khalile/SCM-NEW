@@ -192,11 +192,15 @@ def write_pdf_view1(modeladmin, request, queryset):
 #         ins+f+disp
 #     writer.writerow(books)
 #     return response
-
-
 # export_books.short_description = 'Export to csv'
 # add the attacement files case in admin page as inline fields
-
+def duplicate_event(modeladmin, request, queryset):
+  
+    for object in queryset:
+        object.id = None
+        object. know_support_programme='copy'
+        object.save()
+duplicate_event.short_description = "Duplicate selected record"
 
 class CaseFileInline(admin.StackedInline):
     model = CaseFile
@@ -207,7 +211,16 @@ class CaseFileInline(admin.StackedInline):
             'fields': [('descrpiton', 'file', )]
         }],
     ]
-
+#add attatcment to the applications come from another orginasitions
+class CaseFileInline_org(admin.StackedInline):
+    model = CaseFile_org
+    extra = 0
+    fieldsets = [
+        ['ملفات مرفقة', {
+            # 'classes': ['work_detail'],
+            'fields': [('descrpiton', 'file', )]
+        }],
+    ]
 # class to add the docs in jobs subform
 
 
@@ -270,7 +283,7 @@ class CheckingInline1(admin.StackedInline):
     model = Checking
     fieldsets = [
         ['المعالجة', {
-            'fields': [('tiitle_of_state', ), ('urg_mark', 'confirm_stat'), ('date_of_updat', 'total_of_note')]
+            'fields': [('tiitle_of_state', ), ('urg_mark', 'confirm_stat'), ('date_of_updat','colse_or_open', 'total_of_note')]
         }],
         ['الخطوة الأولى من التحقق', {
             'classes': ['first_step', 'collapse'],
@@ -305,7 +318,7 @@ class RegistrationAdmin(admin.ModelAdmin):
 
     list_display = ('user', 'get_email', 'get_First_name', 'get_last_name', 'get_country', 'get_region', 'get_who_are_you', 'job', 'get_eduction_level',
                     'type_of_dmande', 'support_org_state_1', 'created_at', 'state_step','get_violation','get_result_SCM','get_result_org', 'get_support_name_orgs',
-                    'get_date_respond',)
+                    'get_date_respond','get_open_or_close')
     # group fields in sub groups
     fieldsets = [
         ['المعالجة', {
@@ -357,15 +370,16 @@ class RegistrationAdmin(admin.ModelAdmin):
                    ('created_at', DateRangeFilter),
                    ('profile__current_country', ChoiceDropdownFilter), (
                        'profile__current_region', ChoiceDropdownFilter),
-                   ( 'violation__violation_type', ChoiceDropdownFilter), ('registration__result_of_verfication', ChoiceDropdownFilter),
-                    ('supportOrgchild__result_of_org', ChoiceDropdownFilter),('supportOrgchild__support1'),
-                   ('violations', ChoiceDropdownFilter), ('relation_with_org',ChoiceDropdownFilter),('supportOrgchild__date_of_response', DateRangeFilter),
-                   ('medical_state_q', ChoiceDropdownFilter), ('profile__gender', ChoiceDropdownFilter),
-                   ('org_memeber', ChoiceDropdownFilter),)
+                   ( 'violation__violation_type', ChoiceDropdownFilter),('violations', ChoiceDropdownFilter),('relation_with_org',ChoiceDropdownFilter),
+                    ('medical_state_q', ChoiceDropdownFilter), ('profile__gender', ChoiceDropdownFilter),('org_memeber', ChoiceDropdownFilter),
+                    ('supportOrgchild__date_of_response', DateRangeFilter),
+                    ('registration__result_of_verfication', ChoiceDropdownFilter),
+                    ('supportOrgchild__result_of_org', ChoiceDropdownFilter),('supportOrgchild__support1'), ('registration__colse_or_open', ChoiceDropdownFilter),
+                   )
     search_fields = ('job', 'user__first_name',
                      'user__last_name', 'user__email', 'profile__phone')
     #raw_id_fields = ('user',)
-    actions = [write_pdf_view1,export_as_xls,  ]
+    actions = [write_pdf_view1,export_as_xls,duplicate_event]
     # def has_change_permission(self, request, obj=None):
     #       return False
     # function to get the user name after any action
@@ -411,7 +425,8 @@ class RegistrationAdmin(admin.ModelAdmin):
             return obj.get_education_level_display()
     def get_date_respond(self,obj):
                 return ",".join([str(k.date_of_response) for k in obj.supportOrgchild.all()])
-
+    def get_open_or_close(self,obj):
+            return obj.registration.get_colse_or_open_display()
     get_violation.short_description='الانتهاكات'
     get_First_name.short_description = 'الاسم الاول'
     get_last_name.short_description = 'الاسم الاخير'
@@ -424,6 +439,7 @@ class RegistrationAdmin(admin.ModelAdmin):
     get_support_name_orgs.short_description='الجهات الداعمة'
     get_eduction_level.short_description='المستوى التعليمي'
     get_date_respond.short_description='تاريخ الاحالة'
+    get_open_or_close.short_description='متابعة الحالة'
     list_per_page = 100
    
     class Media:
@@ -521,9 +537,16 @@ class orgchildeadmin(admin.ModelAdmin):
     get_email.short_description = _('البريد الالكتروني')
 
 class  app_from_org_admin(admin.ModelAdmin):
-    list_display = ('first_name','email','date_of_response','support1','state_summary','scm_summary')
+    list_display = ('first_name','email','date_of_response','support1','state_summary','scm_summary', 'get_attach',)
     search_fields = ['first_name', 'email']
     list_filter = ['support1',('date_of_response', DateRangeFilter) ]
+    inlines=[CaseFileInline_org,]
+    
+    def get_attach(self,obj):
+                return ",".join([str(k.file) for k in obj.case_org.all()])
+    
+    get_attach.short_description=_('الملفات المرفقة')
+
 class org_description_admin(admin.ModelAdmin):
     """Create an admin view of the cost and support """
     list_display = ('suppo', 'suppo_description')
