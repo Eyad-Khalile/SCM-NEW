@@ -47,7 +47,7 @@ def contact(request):
             print('subject ====== ', subject)
             print('from_email ====== ', from_email)
             print('message ====== ', message)
-            
+
             try:
                 send_mail(subject, message, from_email,
                           ['khalile.eyad@gmail.com'])
@@ -307,7 +307,6 @@ def app_media_act(request, user_id):
 
             messages.success(request, _('لقد تم تقديم الطلب بنجاح'))
 
-            
             mail_subject = 'تأكيد استلام طلب'
             message = 'لقد تم استلام الطلب و ستتم معالجته باقرب وقت ممكن و إعلامكم بالنتجية'
             to_email = request.user.email
@@ -338,3 +337,8 @@ def app_media_act(request, user_id):
     }
 
     return render(request, 'formula/app_media_act.html', context)
+
+
+def faq(request):
+
+    return render(request, 'account/faq.html')
