@@ -16,7 +16,7 @@ from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
-import arabic_reshaper
+#import arabic_reshaper
 from bidi.algorithm import get_display
 import csv
 import codecs
@@ -406,9 +406,9 @@ class RegistrationAdmin(admin.ModelAdmin):
     def get_last_name(self, obj):
         return obj.user.last_name
     def get_country(self, obj):
-        return obj.profile.current_country
+        return obj.profile.get_current_country_display()
     def get_region(self, obj):
-        return obj.profile.current_region
+        return obj.profile.get_current_region_display()
     def get_who_are_you(self, obj):
         return obj.profile.get_who_are_you_display()
     def get_violation(self,obj):
@@ -444,7 +444,7 @@ class RegistrationAdmin(admin.ModelAdmin):
    
     class Media:
         js = ('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
-              '../static/js/test_olde_2.js', '../static/js/work_2.js',)
+              '../static/js/test_test.js', '../static/js/work_2.js',)
         css = {
             'all': (
                 '../static/css/admin.css',

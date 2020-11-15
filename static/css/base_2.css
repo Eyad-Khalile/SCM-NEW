@@ -596,11 +596,11 @@ hr {
 }
 
 .container-bg {
-    background-image: url('./../media/bg-container.jpg');
+    /* background-image: url('./../media/bg-container.jpg');
     background-size: cover;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; */
     /* height: 100vh; */
-    background-attachment: fixed;
+    /* background-attachment: fixed; */
     position: relative;
     padding-bottom: 3rem;
 }

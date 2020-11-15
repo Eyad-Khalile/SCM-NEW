@@ -423,7 +423,8 @@ $(document).ready(function () {
     });
 
 
-
+    // MAP STYLE
+    // $('div.bk').attr('width', '100%'); 
 
 
 

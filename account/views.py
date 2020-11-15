@@ -7,7 +7,7 @@ from django.core.mail import send_mail, BadHeaderError
 from django.utils.translation import gettext as _
 from django.contrib import messages
 from django.contrib.auth.models import User
-
+from .models import Profile,RegisterMediaAct
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -16,14 +16,58 @@ from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.forms import formset_factory
 from django.forms import formset_factory, modelformset_factory, inlineformset_factory
-
+from bokeh.plotting import figure, output_file, show
+from bokeh.embed import components
+from bokeh.tile_providers import CARTODBPOSITRON, get_provider
+from bokeh.io import show
+from bokeh.plotting import figure
+from bokeh.models import GeoJSONDataSource, LinearColorMapper, ColorBar
+import csv
+import geopandas as gpd
+import json
+import pandas as pd
+from django.db.models import Q
+from bokeh.palettes import brewer
+from bokeh.models import ColumnDataSource, HoverTool
 
 # ::::::::::: HOME PAGE :::::::::
 def home(request):
-    context = {
+    # with open('C:/Users/SCM_User/analytics_project/dashboard/data/syria_map.csv', 'r') as f:
+    #      r = csv.reader(f)
+    #      lines=list(r)
+    # with open('C:/Users/SCM_User/analytics_project/dashboard/data/syria_map.csv', 'w',newline='') as t:
+    #                writer = csv.writer(t)
+    #                for i  in dict(Profile.city_CHOICES).keys():
+    #                    lines[int(i)+1][2]= RegisterMediaAct.objects.filter(Q(violations=0) & Q(profile__current_region =i) ).count()
+    #                writer.writerows(lines) 
+    
+    data_df_syria = pd.read_csv(r'data/syria_map.csv',dtype=object)
+    data_df_syria.rename(columns={'Total Confirmed cases':'Cases','Name of State / UT':'VARNAME_1'},inplace=True)
+    data_syria=data_df_syria.drop(['S. No.'], axis=1)
+    fp = r'C:/Users/SCM_User/analytics_project/dashboard/data/SYR_adm1.shp'
+    sf_syria = gpd.read_file(fp)
+    syria=sf_syria.drop(['NAME_1','HASC_1','CCN_1','CCA_1','TYPE_1','ENGTYPE_1','NL_NAME_1'], axis=1)
+    concated=pd.concat([data_syria['Cases'].reset_index(drop=True),syria.reset_index(drop=True)], axis=1)
+    merged_json = json.loads(concated.to_json())
+    json_data = json.dumps(merged_json)
+    geosource = GeoJSONDataSource(geojson = json_data)
+    palette = brewer['PuRd'][8]
+    palette = palette[::-1]
+    color_mapper = LinearColorMapper(palette = palette, low=concated['Cases'].astype(int).min(), high=concated['Cases'].astype(int).max(), nan_color = '#d9d9d9')   
+    tick_labels = {'5000': '>5000'}
+    hover = HoverTool(tooltips = [ ('Country','@VARNAME_1'),('Cases','@Cases')])
+    color_bar = ColorBar(color_mapper=color_mapper, label_standoff=8,width = 500, height = 20,
+border_line_color=None,location = (0,0), orientation = 'horizontal', major_label_overrides = tick_labels)
+    p = figure(title = 'Number of violation cases in Syria', sizing_mode = 'stretch_width', toolbar_location = None, tools = [hover])
+    p.xgrid.grid_line_color = None
+    p.ygrid.grid_line_color = None
+    p.patches('xs','ys', source = geosource,fill_color = {'field' :'Cases', 'transform' : color_mapper}, line_color = 'black', line_width = 0.25, fill_alpha = 1)
+    p.add_layout(color_bar, 'right')             
+    script ,div = components(p)
+    # context = {
 
-    }
-    return render(request, 'account/home.html', context)
+    # }
+    return render(request, 'account/home.html',  {'script': script,'div': div})
 
 # ::::::::::: ABOUT US :::::::::
 
@@ -32,7 +76,7 @@ def about(request):
 
     return render(request, 'account/about_as.html')
 
-# :::::::::::::::::::: CONTACT US :::::::::::::::::::::
+# :::::::::::::::::::: CONTACT US :::::::::::::::::::::00
 
 
 def contact(request):

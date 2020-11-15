@@ -888,6 +888,7 @@ $(document).ready(function () {
 });
 
 //all for notes and export values from parent model
+$('#id_checking-0-tiitle_of_state').val($('#id_profile option:selected').text() );
 $(document).ready(function () {
     //for fill field
     //$('##id_first_name').removeAttr('readonly');
@@ -902,9 +903,6 @@ $(document).ready(function () {
     // );
 
     $('#id_checking-0-tiitle_of_state').addClass('w-50');
-    $('#id_checking-0-tiitle_of_state').val(
-        $('#id_profile option:selected').text()
-    );
     /////// get the user id value without reload the page
     $('#id_user').select2();
 

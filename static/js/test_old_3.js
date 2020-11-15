@@ -32,6 +32,41 @@ $(document).ready(function () {
     }
     var text = $("#id_articls_link_1").val();
 });
+// function to states processing 
+$(document).ready(function () {
+    $(function () {
+        $('.first_step').hide();
+        $('.second_step').hide();
+        $('.third_step').hide();
+        $('.forth_step').hide();
+        $('.upload_files').hide();
+
+
+        // $('.abcdefgh').hide();
+        $('#id_state_step').change(function () {
+            $('.upload_files').hide();
+            // $('.abcdefgh').hide();
+            if (this.options[this.selectedIndex].value == '2') {
+                $('.first_step').show();
+
+            }
+            if (this.options[this.selectedIndex].value == '3') {
+                $('.second_step').show();
+            }
+            if (this.options[this.selectedIndex].value == '4') {
+                $('.third_step').show();
+            }
+            if (this.options[this.selectedIndex].value == '5') {
+                $('.forth_step').show();
+            }
+            if (this.options[this.selectedIndex].value == '5') {
+                $('.upload_files').show();
+            }
+
+        });
+
+    });
+});
 //function to hide yes and no qustions from regestration admin interface
 /////////////////////////////////////////////////////////////////////////
 $(document).ready(function () {
@@ -437,7 +472,12 @@ $(document).ready(function () {
                     break;
             }
         });
-
+        //function to hide the cost of supportorg
+        $('#id_supportorgchild_set-0-cost').hide();
+        if ($('#id_supportorgchild_set-0-result_of_org').val() == '0') {
+            $('#id_supportorgchild_set-0-cost').show();
+        }
+        
 
 
         // $('label[for=id_have_kids],#id_have_kids,.field-have_kids,.field-number_kids,.field-summary_of_recsituation').hide();
@@ -770,7 +810,6 @@ $(document).ready(function () {
 // function to note the years of experinces
 $(document).ready(function () {
     $(function () {
-        // $('.abcdefgh').hide();
         $("#id_checking-0-number_of_year_exprince").change(function () {
             var years_exp = $("#id_checking-0-number_of_year_exprince").val();
             switch (years_exp) {
@@ -782,14 +821,9 @@ $(document).ready(function () {
                     break;
                 case "2":
                     $("#id_checking-0-note_of_year_experince").val("3");
-                    break;
-                case "3":
-                    $("#id_checking-0-note_of_year_experince").val("0");
-                    break;
-
-                default:
-                    $("#id_checking-0-note_of_year_experince").val("0");
-            }
+                   break;
+               
+                            }
         });
     });
 });
@@ -864,61 +898,84 @@ $(document).ready(function () {
     //     "  " +
     //     $("#id_city").val()
     // );
+
+    $('#id_checking-0-tiitle_of_state').addClass('w-50');
+    $('#id_checking-0-tiitle_of_state').val(
+        $('#id_profile option:selected').text()
+    );
+
+
+
     //$('#id_first_name').add('readonly');
     //family number into family state
-    $('#id_checking-0-tiitle_of_state').val($('#id_profile option:selected').text());
-    $("#id_checking-0-family_state_1").val($("#id_number_kids").val());
+    //$("#id_checking-0-family_state_1").val($("#id_number_kids").val());
     $("#id_checking-0-first_recmond_name").val($("#id_recmond_1").val());
     $("#id_checking-0-second_recmond_name").val($("#id_recmond_2").val());
+    //$("#id_checking-0-confirm_stat").val($('#id_type_of_dmande').value());
+
 
     //here is you can write placeholder for all fields that exist in inline form
     // $("#id_checking-0-cruntly_adre").attr('placeholder', 'hello' )
-    //$("#id_checking-0-confirm_stat").val($('#id_type_of_dmande').value());
+   // $("#id_checking-0-confirm_stat").val($('#id_type_of_dmande').value());
     //This is a simple way of getting the DAYS between two dates**
-
-    $("#id_checking-0-number_of_year_exprince").val($("#id_start_date").val());
-
     var demand = $("#id_type_of_dmande").val();
-    var edu_point = $("#id_educatton_level").val();
+    var edu_point = $("#id_education_level").val();
     var media_memeber = $("#id_org_memeber").val();
-    var medical_state = $("#id_medical_state_inf").val();
-    var paid1_job = $("#id_paid_job").val();
-
+    var medical_state = $("#id_medical_state_q").val();
+    var paid1_job = $("#id_experience").val();
+    var violation_q = $("#id_violations").val();
+//id_checking-0-hase_violants,
     var a = parseInt($("#id_checking-0-member_in_journal").val());
     var b = parseInt($("#id_checking-0-educatton_level_1").val());
     var c = parseInt($("#id_checking-0-medical_state").val());
     var d = parseInt($("#id_checking-0-note_paid_job").val());
-    var f = parseInt($("#id_checking-0-mark_rspect_right_human").val());
-    var t = parseInt($("#id_checking-0-mark_rspect_coppyright").val());
-    var g = parseInt($("#id_checking-0-rspect_legal_coppyright").val());
-    var h = parseInt($("#id_checking-0-note_of_year_experince").val());
+    var e = parseInt($("#id_checking-0-note_of_year_experince").val());
+    var f = parseInt($("#id_checking-0-hase_violants").val());
 
-    $("#id_checking-0-total_of_note").val(a + b + c + d + h + f + t);
+//2stage,
+    var g= parseInt($("#id_checking-0-mark_rspect_right_human").val());
+    var h = parseInt($("#id_checking-0-mark_rspect_coppyright").val());
+    var k = parseInt($("#id_checking-0-rspect_legal_coppyright").val());
+   
+    $("#id_checking-0-total_of_note").val(a +c+b +d+e+f+g+h+k );
 
     //give the type of the demande note
     switch (demand) {
-        case "0":
-            $("#id_checking-0-confirm_stat").val("دعم معيش");
-            break;
         case "1":
-            $("#id_checking-0-confirm_stat").val("إيجاد فرصة عمل");
+            $("#id_checking-0-confirm_stat").val('مناصرة');
             break;
         case "2":
-            $("#id_checking-0-confirm_stat").val("خروج آمن");
+            $("#id_checking-0-confirm_stat").val("إيجاد فرصة عمل");
             break;
         case "3":
-            $("#id_checking-0-confirm_stat").val(
-                "خروج دعم ملف اللجوء - تأشيرات خروج"
-            );
+            $("#id_checking-0-confirm_stat").val('دعم قانوني');
             break;
         case "4":
-            $("#id_checking-0-confirm_stat").val("دعم تقني وبطاقات صحفية");
+            $("#id_checking-0-confirm_stat").val('دعم طبي');
             break;
         case "5":
-            $("#id_checking-0-confirm_stat").val("دعم طبي");
+            $("#id_checking-0-confirm_stat").val('دعم ملف اللجوء - تأشيرات خروج');
             break;
         case "6":
-            $("#id_checking-0-confirm_stat").val("غير ذلك");
+            $("#id_checking-0-confirm_stat").val('دعم الانتقال اﻵمن');
+            break;
+        case "7":
+            $("#id_checking-0-confirm_stat").val('الدعم المعيشي');
+            break;
+        case "8":
+                $("#id_checking-0-confirm_stat").val('الدعم التقني');
+                break;
+        case "9":
+                $("#id_checking-0-confirm_stat").val('دعم بطاقات صحفية');
+                break;
+        case "10":
+                $("#id_checking-0-confirm_stat").val('رسائل توصية');
+                 break;
+        case "11":
+                 $("#id_checking-0-confirm_stat").val('خروج آمن');
+                 break;
+        case "12":
+             $("#id_checking-0-confirm_stat").val('غير ذلك');
             break;
         default:
             $("#id_checking-0-confirm_stat").val("0");
@@ -943,10 +1000,10 @@ $(document).ready(function () {
     //give note for the member ship in media commity
     switch (media_memeber) {
         case "0":
-            $("#id_checking-0-member_in_journal").val("1");
+            $("#id_checking-0-member_in_journal").val("0");
             break;
         case "1":
-            $("#id_checking-0-member_in_journal").val("0");
+            $("#id_checking-0-member_in_journal").val("1");
             break;
 
         default:
@@ -954,10 +1011,10 @@ $(document).ready(function () {
     }
     switch (medical_state) {
         case "0":
-            $("#id_checking-0-medical_state").val("1");
+            $("#id_checking-0-medical_state").val("0");
             break;
         case "1":
-            $("#id_checking-0-medical_state").val("0");
+            $("#id_checking-0-medical_state").val("1");
             break;
 
         default:
@@ -965,19 +1022,53 @@ $(document).ready(function () {
     }
     switch (paid1_job) {
         case "0":
-            $("#id_checking-0-note_paid_job").val("1");
+            $("#id_checking-0-note_paid_job").val("0");
             break;
         case "1":
-            $("#id_checking-0-note_paid_job").val("0");
+            $("#id_checking-0-note_paid_job").val("1");
             break;
 
         default:
             $("#id_checking-0-note_paid_job").val("0");
     }
+    switch (violation_q) {
+        case "0":
+            $("#id_checking-0-hase_violants").val("0");
+            break;
+        case "1":
+            $("#id_checking-0-hase_violants").val("1");
+            break;
 
-    //$("#id_item-0-test3").val(a+b)
-    //if (b>2) {
-    // $("#id_state_step").attr("disabled",true);;
-    // }
+        default:
+            $("#id_checking-0-hase_violants").val("0");
+    }
+
+//make all the selected fields readonly after first save 
+//////////////////////////////////////////////////////////////////////////
+    if ($('#id_know_support_programme').val() != '') {
+        $('#id_user, #id_profile, #id_medical_state_q, #id_medical_state_des, #id_family_state, #id_have_kids, #id_number_kids, #id_summary_family, #id_education_level, #id_job, #id_experience, #id_if_stop_work, #id_date_stop_work, #id_org_memeber, #id_details, #id_if_article_linke, #id_articls_link_1, #id_recmond_1, #id_phon_1, #id_email_1, #id_recmond_2, #id_phon_2, #id_email_2, #id_training_media, #id_details_traning_media, #id_summary_of_your_state, #id_violations, #id_other_org_demand, #id_name_org, #id_date_of_demand_org, #id_result_of_demand_other_org, #id_relation_with_org, #id_summary_of_relations, #id_type_of_dmande, #id_resaon_for_help, #id_reason_stopping_job, #id_summary_of_help, #id_know_support_programme').attr('disabled', 'disabled');
+    }
+    if ($('#id_know_support_programme').val() != '') {
+        $('.dynamic-registration_media_act').find('input').attr('disabled', 'disabled');
+        $('.dynamic-registration_media_act').find('select').attr('disabled', 'disabled');
+        $('tr:last-child').hide();
+
+        $('tr.dynamic-docs_set').find('input').attr('disabled', 'disabled');
+    }
+    if ($('#id_know_support_programme').val() != '') {
+        $('.dynamic-violation_set').find('input').attr('disabled', 'disabled');
+        $('.dynamic-violation_set').find('select').attr('disabled', 'disabled');
+        $('.dynamic-violation_set').find('textarea').attr('disabled', 'disabled');
+    }
+    $('form').submit(function (e) {
+        $(':disabled').each(function (e) {
+            $(this).removeAttr('disabled');
+        })
+    });
+ /////////////////////////////////////////////////////////////////////////////////////////////////:
+// 
+
+
+
 });
 django.jQuery;
